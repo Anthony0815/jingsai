@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-04 23:14:13",
+ "generatedAt": "2026-11-04 23:15:48",
  "nextSync": "2026-11-05 08:00:00",
  "items": [
   {
@@ -16,8 +16,7 @@
     "大赛",
     "赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026110418041943588/index.shtml",
@@ -33,8 +32,7 @@
     "参赛",
     "赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811252046399/index.shtml",
@@ -49,8 +47,7 @@
    "tags": [
     "赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811164778331/index.shtml",
@@ -66,8 +63,7 @@
     "大赛",
     "决赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102818075417659/index.shtml",
@@ -1066,9 +1062,8 @@
   {
    "key": "jyyw",
    "name": "辽宁省教育厅 · 教育要闻",
-   "status": "fail",
-   "count": 0,
-   "error": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/index.shtml: URLError"
+   "status": "ok",
+   "count": 4
   },
   {
    "key": "lnut",
@@ -1078,7 +1073,8 @@
   }
  ],
  "platform": {
-  "ok": false,
+  "ok": true,
+  "status": "ok",
   "name": "辽宁省大学生创新创业管理共享平台",
   "url": "https://cxcy.upln.cn/"
  },

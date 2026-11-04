@@ -131,8 +131,10 @@ a { color: inherit; text-decoration: none; }
 
 .state.ok::before { background: #23a55a; }
 .state.bad::before { background: var(--red); }
+.state.skip::before { background: #9aa6b8; }
 .state.ok { color: #1c7c45; }
 .state.bad { color: var(--red); }
+.state.skip { color: #5f6b7d; }
 
 /* ---------------------------------------------------------------- layout */
 .layout {

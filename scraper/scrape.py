@@ -78,14 +78,24 @@ def ssl_context() -> ssl.SSLContext:
 CTX = ssl_context()
 
 
-def fetch(url: str, timeout: int = 30) -> str:
+def fetch(url: str, timeout: int = 30, retries: int = 2) -> str:
     req = urllib.request.Request(url, headers={
         "User-Agent": UA,
         "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
         "Accept-Language": "zh-CN,zh;q=0.9",
     })
-    with urllib.request.urlopen(req, timeout=timeout, context=CTX) as resp:
-        raw = resp.read()
+    last = None
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout, context=CTX) as resp:
+                raw = resp.read()
+            break
+        except Exception as exc:
+            last = exc
+            if attempt + 1 >= retries:
+                raise
+    else:  # pragma: no cover
+        raise last
     for enc in ("utf-8", "gb18030"):
         try:
             return raw.decode(enc)
@@ -215,13 +225,15 @@ def main() -> int:
             sources_status.append({"key": source["key"], "name": source["name"],
                                    "status": "ok", "count": len(got)})
         else:
-            sources_status.append({"key": source["key"], "name": source["name"],
-                                   "status": "fail", "count": 0,
-                                   "error": "; ".join(errors)[:200] or "no items"})
-            # 抓不到就沿用上一份同源缓存，绝不编造
-            for item in previous.values():
-                if item.get("sourceKey") == source["key"]:
-                    merged.append(dict(item, stale=True))
+            cached = [dict(item, stale=True) for item in previous.values()
+                      if item.get("sourceKey") == source["key"]]
+            merged.extend(cached)
+            sources_status.append({
+                "key": source["key"], "name": source["name"],
+                "status": "stale" if cached else "fail",
+                "count": len(cached),
+                "error": "; ".join(errors)[:200] or "no items",
+            })
 
     seen, deduped = set(), []
     for item in merged:
@@ -234,13 +246,17 @@ def main() -> int:
     for item in deduped:
         item["isNew"] = item["url"] not in previous
 
-    platform_ok = False
+    platform = {"ok": False, "status": "unknown", "name": "辽宁省大学生创新创业管理共享平台",
+                "url": "https://cxcy.upln.cn/"}
     try:
         req = urllib.request.Request("https://cxcy.upln.cn/", headers={"User-Agent": UA})
         with urllib.request.urlopen(req, timeout=20, context=CTX) as resp:
-            platform_ok = resp.status == 200
-    except Exception:
-        platform_ok = False
+            platform["ok"] = resp.status == 200
+            platform["status"] = "ok" if platform["ok"] else "fail"
+    except Exception as exc:
+        # 运行环境（如境外 CI）无法完成 TLS 握手时，标记为「未检测」而不是「不可达」
+        platform["status"] = "unknown"
+        platform["error"] = str(exc)[:160]
 
     now = dt.datetime.now(dt.timezone.utc)
     snapshot = {
@@ -254,8 +270,7 @@ def main() -> int:
             "new": sum(1 for x in deduped if x.get("isNew")),
         },
         "sources": sources_status,
-        "platform": {"ok": platform_ok, "name": "辽宁省大学生创新创业管理共享平台",
-                     "url": "https://cxcy.upln.cn/"},
+        "platform": platform,
         "officialLinks": OFFICIAL_LINKS,
     }
 

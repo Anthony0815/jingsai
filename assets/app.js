@@ -130,8 +130,13 @@
     el.sources.innerHTML = (state.data.sources || []).map(function (s) {
       var label = "正常 " + (s.count || 0) + " 条";
       var cls = "s-ok";
-      if (s.status !== "ok") { label = "抓取失败"; cls = "s-bad"; }
-      else if (s.stale) { label = "沿用缓存"; cls = "s-stale"; }
+      if (s.status === "stale") {
+        label = "沿用缓存 " + (s.count || 0) + " 条";
+        cls = "s-stale";
+      } else if (s.status !== "ok") {
+        label = "抓取失败";
+        cls = "s-bad";
+      }
       return '<li><span class="s-name" title="' + esc(s.name) + '">' + esc(s.name) + "</span>" +
         '<span class="' + cls + '">' + label + "</span></li>";
     }).join("");
@@ -141,6 +146,10 @@
       el.platform.textContent = "可访问";
       el.platform.className = "state ok";
       el.platform.title = (p.title || "") + " · 检测于 " + (p.checkedAt || "");
+    } else if (p.status === "unknown") {
+      el.platform.textContent = "未检测";
+      el.platform.className = "state skip";
+      el.platform.title = "本次运行环境网络无法完成检测，可直接点击上方入口访问";
     } else {
       el.platform.textContent = "暂不可达";
       el.platform.className = "state bad";
