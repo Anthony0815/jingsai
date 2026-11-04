@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TEMPLATE = ROOT / "tools" / "page_template.html"
+TEMPLATE = ROOT / "tools" / "page_template.tpl"
 CSS = ROOT / "assets" / "style.css"
 JS = ROOT / "assets" / "app.js"
 DATA = ROOT / "data" / "notices.json"
@@ -54,6 +54,12 @@ def main() -> int:
         "  <span>数据更新于 %s（北京时间）</span>\n</footer>" % snapshot.get("generatedAt", ""), 1)
 
     OUT.write_text(html, encoding="utf-8")
+
+    # 静态托管自检：产物不允许残留对外部资源的引用（assets 已全部内联）
+    for bad in ('src="app.js"', 'href="style.css"', 'src="../assets/', 'href="../assets/'):
+        if bad in html:
+            raise SystemExit("构建失败：产物仍引用外部资源 %s" % bad)
+
     print("index.html 已生成：%d 条通知，%.0f KB" % (
         len(snapshot.get("items", [])), OUT.stat().st_size / 1024))
     return 0

@@ -16,6 +16,9 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      POCKETBAY_TOKEN: ${{ secrets.POCKETBAY_TOKEN }}
+      POCKETBAY_PROJECT: "3681"
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
@@ -42,3 +45,21 @@ jobs:
             git commit -m "chore: 同步官方通知 $(TZ=Asia/Shanghai date +%F)"
             git push
           fi
+
+      # 云端发布到 PocketBay：本机不开机也能更新（无需本机计划任务）
+      - name: 发布到 PocketBay
+        if: env.POCKETBAY_TOKEN != ''
+        continue-on-error: true
+        run: |
+          python -c "import zipfile; z=zipfile.ZipFile('pocketbay.zip','w',zipfile.ZIP_DEFLATED); z.write('index.html'); z.close(); print('zip ok')"
+          curl -sS --retry 3 --max-time 60 -X POST \
+            -H "Authorization: Bearer $POCKETBAY_TOKEN" \
+            -F "file=@pocketbay.zip" \
+            "https://pocketbay.com/api/projects/$POCKETBAY_PROJECT/deploy" -o deploy.json
+          cat deploy.json
+          for i in $(seq 1 20); do
+            sleep 6
+            curl -sS --retry 3 --max-time 60 -H "Authorization: Bearer $POCKETBAY_TOKEN" \
+              "https://pocketbay.com/api/projects/$POCKETBAY_PROJECT/deploy/status" -o status.json
+            python -c "import json,sys; d=json.load(open('status.json')); print('status=%s phase=%s stage=%s' % (d.get('status'), d.get('phase'), '>'.join(d.get('stage_events') or []))); sys.exit(0 if d.get('phase')=='success' else 1)" && { echo "POCKETBAY_DEPLOY_OK"; break; } || true
+          done
