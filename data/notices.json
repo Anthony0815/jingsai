@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-04 23:15:48",
+ "generatedAt": "2026-11-04 23:18:05",
  "nextSync": "2026-11-05 08:00:00",
  "items": [
   {
@@ -1073,10 +1073,11 @@
   }
  ],
  "platform": {
-  "ok": true,
-  "status": "ok",
+  "ok": false,
+  "status": "unknown",
   "name": "辽宁省大学生创新创业管理共享平台",
-  "url": "https://cxcy.upln.cn/"
+  "url": "https://cxcy.upln.cn/",
+  "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
  },
  "officialLinks": [
   {
