@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>辽宁省创新创业大赛 · 官方通知聚合</title>
+<style>
+:root {
+  --ink: #16233b;
+  --ink-2: #4a5a72;
+  --ink-3: #7b8aa1;
+  --line: #e3e8f0;
+  --bg: #f5f7fb;
+  --blue: #1b4fd8;
+  --blue-soft: #eaf0ff;
+  --red: #c8372d;
+  --amber: #b4761a;
+  --shadow: 0 10px 30px rgba(22, 35, 59, .07);
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px/1.65 "Microsoft YaHei", "PingFang SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.wrap { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
+
+/* ---------------------------------------------------------------- topbar */
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 0;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+
+.logo {
+  width: 44px; height: 44px;
+  flex: 0 0 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1b4fd8, #3f7bff);
+  color: #fff;
+  display: grid; place-items: center;
+  font-size: 22px; font-weight: 700;
+  box-shadow: 0 6px 16px rgba(27, 79, 216, .28);
+}
+
+.brand-text h1 {
+  margin: 0;
+  font-size: 19px;
+  letter-spacing: .2px;
+  font-weight: 700;
+}
+
+.brand-text h1 span {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-left: 6px;
+}
+
+.brand-text p { margin: 3px 0 0; font-size: 12.5px; color: var(--ink-3); }
+
+.topbar-actions { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 38px; padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .16s ease;
+  white-space: nowrap;
+}
+
+.btn.primary { background: var(--blue); color: #fff; }
+.btn.primary:hover { background: #1740b4; }
+.btn.primary[disabled] { opacity: .6; cursor: progress; }
+
+.btn.ghost { background: #fff; border-color: var(--line); color: var(--ink-2); }
+.btn.ghost:hover { border-color: #c3d0e6; color: var(--blue); }
+
+/* ---------------------------------------------------------------- status */
+.statusbar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin: 20px 0 18px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.stat { background: #fff; padding: 14px 18px; min-width: 0; }
+
+.stat-label { display: block; font-size: 12px; color: var(--ink-3); }
+
+.stat strong { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.countdown { font-style: normal; font-size: 12px; color: var(--blue); margin-left: 8px; }
+
+.newcount { font-style: normal; font-size: 12px; color: var(--red); margin-left: 8px; }
+
+.state::before {
+  content: "";
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #c3ccda;
+  margin-right: 7px;
+  vertical-align: 1px;
+}
+
+.state.ok::before { background: #23a55a; }
+.state.bad::before { background: var(--red); }
+.state.ok { color: #1c7c45; }
+.state.bad { color: var(--red); }
+
+/* ---------------------------------------------------------------- layout */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: start;
+  padding-bottom: 40px;
+}
+
+.main-col { min-width: 0; }
+
+/* ---------------------------------------------------------------- toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; flex: 1 1 auto; }
+
+.tab {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: .15s ease;
+  font-family: inherit;
+}
+
+.tab:hover { border-color: #c3d0e6; color: var(--blue); }
+
+.tab.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+  font-weight: 600;
+}
+
+.tab .num {
+  font-size: 11.5px;
+  opacity: .78;
+  margin-left: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.search { flex: 0 0 260px; }
+
+.search input {
+  width: 100%;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+  transition: .15s ease;
+}
+
+.search input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+
+/* ---------------------------------------------------------------- list */
+.notice-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+
+.notice {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 15px 18px;
+  cursor: pointer;
+  transition: .16s ease;
+  position: relative;
+}
+
+.notice:hover {
+  border-color: #bccce6;
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+.notice-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #f0f3f9;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.badge.cxcy { background: var(--blue-soft); color: var(--blue); }
+.badge.race { background: #fff3e4; color: var(--amber); }
+.badge.fresh { background: #fdeceb; color: var(--red); }
+
+.notice h3 {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.notice:hover h3 { color: var(--blue); }
+
+.notice-meta {
+  margin-top: 7px;
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--ink-3);
+  flex-wrap: wrap;
+}
+
+.notice-meta span::before { content: "· "; color: #c3ccda; }
+.notice-meta span:first-child::before { content: ""; }
+
+.notice .go {
+  position: absolute;
+  right: 16px; bottom: 14px;
+  font-size: 12px;
+  color: var(--blue);
+  opacity: 0;
+  transition: .16s ease;
+}
+
+.notice:hover .go { opacity: 1; }
+
+.skeleton {
+  height: 84px;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, #eef2f8 25%, #f7f9fc 37%, #eef2f8 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.3s ease infinite;
+}
+
+@keyframes shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+.empty { text-align: center; color: var(--ink-3); padding: 40px 0; }
+
+/* ---------------------------------------------------------------- side */
+.side-col { display: flex; flex-direction: column; gap: 14px; position: sticky; top: 92px; }
+
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+
+.card h2 { margin: 0 0 4px; font-size: 14.5px; font-weight: 700; }
+
+.card-sub { margin: 0 0 10px; font-size: 12px; color: var(--ink-3); line-height: 1.6; }
+
+.link-list, .source-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+.link-list a {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 9px;
+  transition: .15s ease;
+  border: 1px solid transparent;
+}
+
+.link-list a:hover { background: #f6f8fd; border-color: #e3ebfa; }
+
+.link-list strong { display: block; font-size: 13px; font-weight: 600; }
+
+.link-list small { display: block; font-size: 11.5px; color: var(--ink-3); line-height: 1.5; }
+
+.source-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px dashed #eef1f6;
+  font-size: 12.5px;
+}
+
+.source-list li:last-child { border-bottom: 0; }
+
+.source-list .s-name { color: var(--ink-2); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.source-list .s-ok { color: #1c7c45; font-size: 11.5px; flex: 0 0 auto; }
+.source-list .s-bad { color: var(--red); font-size: 11.5px; flex: 0 0 auto; }
+.source-list .s-stale { color: var(--amber); font-size: 11.5px; flex: 0 0 auto; }
+
+.hint p { font-size: 12px; color: var(--ink-3); line-height: 1.7; margin: 6px 0 0; }
+.hint b { color: var(--ink-2); }
+
+/* ---------------------------------------------------------------- footer */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0 30px;
+  font-size: 12px;
+  color: var(--ink-3);
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------------- drawer */
+.drawer-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 26, 44, .38);
+  z-index: 40;
+  animation: fade .18s ease;
+}
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.drawer {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: min(760px, 92vw);
+  background: #fff;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -18px 0 48px rgba(16, 26, 44, .18);
+  animation: slide .22s ease;
+}
+
+@keyframes slide { from { transform: translateX(40px); opacity: .6; } to { transform: none; opacity: 1; } }
+
+.drawer-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.drawer-head h2 { margin: 0; font-size: 16.5px; line-height: 1.55; word-break: break-word; }
+
+.drawer-meta { margin: 6px 0 0; font-size: 12px; color: var(--ink-3); }
+
+.icon-btn {
+  border: 0;
+  background: #f2f4f9;
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink-2);
+  flex: 0 0 32px;
+}
+
+.icon-btn:hover { background: #e8ecf5; }
+
+.drawer-body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 20px 26px;
+  font-size: 14.5px;
+  line-height: 1.9;
+  color: #22304a;
+}
+
+.drawer-body p { margin: 0 0 14px; }
+.drawer-body img { max-width: 100%; height: auto; }
+.drawer-body table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 13px; }
+.drawer-body td, .drawer-body th { border: 1px solid var(--line); padding: 6px 9px; }
+.drawer-body a { color: var(--blue); text-decoration: underline; }
+
+.drawer-foot {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--line);
+  background: #fbfcfe;
+  flex-wrap: wrap;
+}
+
+.drawer-note { font-size: 11.5px; color: var(--ink-3); flex: 1 1 200px; }
+
+.loading-line { color: var(--ink-3); font-size: 13px; }
+
+/* ---------------------------------------------------------------- responsive */
+@media (max-width: 1080px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .side-col { position: static; flex-direction: row; flex-wrap: wrap; }
+  .side-col .card { flex: 1 1 300px; }
+  .statusbar { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 720px) {
+  .wrap { width: calc(100% - 28px); }
+  .topbar-inner { flex-wrap: wrap; gap: 12px; }
+  .brand-text p { display: none; }
+  .search { flex: 1 1 100%; }
+  .statusbar { grid-template-columns: 1fr 1fr; }
+  .stat { padding: 12px 14px; }
+  .stat strong { display: block; font-size: 14px; }
+  .countdown, .newcount { display: block; margin: 4px 0 0; }
+  .notice .go { display: none; }
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand">
+      <div class="logo">辽</div>
+      <div class="brand-text">
+        <h1>辽宁省创新创业大赛 <span>官方通知聚合</span></h1>
+        <p>省市教育厅与省级双创平台公开页面 · 每日 08:00 自动同步 · 标题与链接均保持官方原文</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <a class="btn ghost" id="platformLink" href="https://cxcy.upln.cn/" target="_blank" rel="noopener noreferrer">
+        辽宁省双创平台 ↗
+      </a>
+      <span class="btn ghost static-badge" title="由 GitHub Actions 每日 08:00 自动抓取">每日 08:00 自动更新</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="statusbar">
+    <div class="stat">
+      <span class="stat-label">最近同步</span>
+      <strong id="lastSync">—</strong>
+    </div>
+    <div class="stat">
+      <span class="stat-label">下次自动同步</span>
+      <strong id="nextSync">—</strong>
+      <em id="countdown" class="countdown"></em>
+    </div>
+    <div class="stat">
+      <span class="stat-label">官方条目</span>
+      <strong><span id="totalCount">0</span> 条</strong>
+      <em id="newCount" class="newcount"></em>
+    </div>
+    <div class="stat">
+      <span class="stat-label">双创平台连通</span>
+      <strong id="platformState" class="state">检测中…</strong>
+    </div>
+  </section>
+
+  <div class="layout">
+    <section class="main-col">
+      <div class="toolbar">
+        <nav class="tabs" id="tabs" aria-label="频道筛选">
+          <button class="tab active" data-tab="all" type="button">全部 <span class="num" data-num="all">0</span></button>
+          <button class="tab" data-tab="cxcy" type="button">创新创业 <span class="num" data-num="cxcy">0</span></button>
+          <button class="tab" data-tab="tournament" type="button">大赛活动 <span class="num" data-num="tournament">0</span></button>
+          <button class="tab" data-tab="zxtz" type="button">省厅通知</button>
+          <button class="tab" data-tab="gsgg" type="button">公示公告</button>
+          <button class="tab" data-tab="lnut" type="button">高校竞赛通知</button>
+        </nav>
+        <div class="search">
+          <input id="searchInput" type="search" placeholder="搜索标题，如「选拔赛」" autocomplete="off">
+        </div>
+      </div>
+
+      <ul class="notice-list" id="noticeList">
+        <li class="skeleton"></li>
+        <li class="skeleton"></li>
+        <li class="skeleton"></li>
+      </ul>
+      <p class="empty" id="emptyTip" hidden>没有匹配的通知，换个关键词或频道试试。</p>
+    </section>
+
+    <aside class="side-col">
+      <div class="card">
+        <h2>官方入口</h2>
+        <p class="card-sub">点击直达官方页面，报名与评审以官方系统为准。</p>
+        <ul class="link-list" id="officialLinks"></ul>
+      </div>
+      <div class="card">
+        <h2>数据来源</h2>
+        <p class="card-sub">全部内容实时抓取自官方公开页面，不转载、不改写标题。</p>
+        <ul class="source-list" id="sourceList"></ul>
+      </div>
+      <div class="card hint">
+        <h2>同步说明</h2>
+        <p>本页由 <b>GitHub Actions</b> 每天 <b>北京时间 08:00</b> 自动抓取官方公开页面并重新发布，无需人工干预。</p>
+        <p>若某次抓取失败，该来源会继续显示上一次的缓存内容（标记「沿用缓存」），不会出现编造条目。</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer wrap">
+  <span>内容版权归原作者所有 · 本站仅做官方公开信息的聚合展示</span>
+  <span id="footTime"></span>
+  <span>数据更新于 2026-11-04 23:07:44（北京时间）</span>
+</footer>
+
+<div class="drawer-mask" id="drawerMask" hidden></div>
+<section class="drawer" id="drawer" hidden aria-modal="true" role="dialog">
+  <header class="drawer-head">
+    <div>
+      <h2 id="drawerTitle">通知原文</h2>
+      <p class="drawer-meta" id="drawerMeta"></p>
+    </div>
+    <button class="icon-btn" id="drawerClose" type="button" aria-label="关闭">×</button>
+  </header>
+  <div class="drawer-body" id="drawerBody"></div>
+  <footer class="drawer-foot">
+    <a class="btn primary" id="drawerOpen" href="#" target="_blank" rel="noopener noreferrer">打开官方原文 ↗</a>
+    <span class="drawer-note">正文由官方页面实时提取，仅作阅读预览，最终以官方原文为准。</span>
+  </footer>
+</section>
+
+<script>window.__EMBEDDED_DATA__ = {"generatedAt": "2026-11-04 23:07:44", "nextSync": "2026-11-05 08:00:00", "items": [{"id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026110418070059737/index.shtml", "title": "第四届全国大学生职业规划大赛辽宁省赛启动会在沈阳召开", "url": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026110418070059737/index.shtml", "date": "2026-11-04", "sourceKey": "jyyw", "source": "辽宁省教育厅 · 教育要闻", "category": "赛事动态", "cxcy": false, "tournament": true, "tags": ["大赛", "赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026110418041943588/index.shtml", "title": "44所高校参赛！2026年辽宁省大学生武术锦标赛圆满收官", "url": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026110418041943588/index.shtml", "date": "2026-11-04", "sourceKey": "jyyw", "source": "辽宁省教育厅 · 教育要闻", "category": "赛事动态", "cxcy": false, "tournament": true, "tags": ["参赛", "赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811252046399/index.shtml", "title": "绿茵牵两地 辽苏共成长！辽苏校园足球友谊赛在大连圆满落幕", "url": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811252046399/index.shtml", "date": "2026-10-28", "sourceKey": "jyyw", "source": "辽宁省教育厅 · 教育要闻", "category": "赛事动态", "cxcy": false, "tournament": true, "tags": ["赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811164778331/index.shtml", "title": "第十五届辽宁省高校思想政治理论课教学大赛决赛在沈阳举办", "url": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811164778331/index.shtml", "date": "2026-10-28", "sourceKey": "jyyw", "source": "辽宁省教育厅 · 教育要闻", "category": "赛事动态", "cxcy": false, "tournament": true, "tags": ["大赛", "决赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102818075417659/index.shtml", "title": "关于2026年国门学校优秀青年教师培养支持计划拟推荐人选名单的公示", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102818075417659/index.shtml", "date": "2026-10-28", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186227.htm", "title": "辽工大创字〔2026〕134号关于举办辽宁工业大学2026年大学生动漫与创意设计大赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186227.htm", "date": "2026-10-27", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102710230990761/index.shtml", "title": "关于2027年少数民族高层次骨干人才计划研究生报考资格审核拟通过名单的公示", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102710230990761/index.shtml", "date": "2026-10-27", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102315324974098/index.shtml", "title": "辽宁省教育厅关于高职院校免试和保送录取工作的公告", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102315324974098/index.shtml", "date": "2026-10-23", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102315282782756/index.shtml", "title": "关于对沈阳市苏家屯区等5个县（市、区）开展学前教育普及普惠省级督导评估的公告", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102315282782756/index.shtml", "date": "2026-10-23", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102315270673919/index.shtml", "title": "关于对本溪市溪湖区等7个县（市、区）开展义务教育优质均衡发展省级督导评估的公告", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102315270673919/index.shtml", "date": "2026-10-23", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026102110290659632/index.shtml", "title": "关于举办第四届全国大学生职业规划大赛辽宁省赛的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026102110290659632/index.shtml", "date": "2026-10-21", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": true, "tags": ["大赛", "赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186225.htm", "title": "辽工大创字〔2026〕133号关于举办辽宁工业大学2027第十一届米兰设计周——中国高校设计学科师生优秀作品...", "url": "https://cxcy.lnut.edu.cn/info/14428/186225.htm", "date": "2026-10-20", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186224.htm", "title": "辽工大创字〔2026〕132号关于举办辽宁工业大学2026年辽宁省大学生外语综合技能创新挑战赛“早道杯”辽宁...", "url": "https://cxcy.lnut.edu.cn/info/14428/186224.htm", "date": "2026-10-20", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186222.htm", "title": "辽工大创字〔2026〕131号关于举办辽宁工业大学2026年职业规划大赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186222.htm", "date": "2026-10-16", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026101410592521491/index.shtml", "title": "辽宁省2027年少数民族高层次骨干人才研究生报考资格审核补充公告", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026101410592521491/index.shtml", "date": "2026-10-14", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186218.htm", "title": "辽工大创字〔2026〕129号关于举办辽宁工业大学2026年“新锐设计竞赛•华灿奖”暨辽宁赛区选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186218.htm", "date": "2026-10-10", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["竞赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186216.htm", "title": "辽工大创字〔2026〕127号关于举办辽宁工业大学2026年辽宁省大学生华为ICT大赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186216.htm", "date": "2026-10-08", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026100814093187016/index.shtml", "title": "辽宁省营商环境经营主体和群众调查问卷", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026100814093187016/index.shtml", "date": "2026-10-08", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026093016045232748/index.shtml", "title": "辽宁省2027年少数民族高层次骨干人才研究生报考资格审核公告", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026093016045232748/index.shtml", "date": "2026-09-30", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026092814270877642/index.shtml", "title": "关于印发《辽宁省教育厅废止、失效和保留有效行政规范性文件目录（2026年）》的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026092814270877642/index.shtml", "date": "2026-09-28", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186213.htm", "title": "辽工大创字〔2026〕126号关于举办辽宁工业大学2026年大学生应急救援创新设计大赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186213.htm", "date": "2026-09-24", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186211.htm", "title": "辽工大创字〔2026〕124号关于举办辽宁工业大学2027年大学生市场调查与分析大赛暨辽宁赛区选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186211.htm", "date": "2026-09-23", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026092211315648073/index.shtml", "title": "关于公布第三十届辽宁省教育教学信息化交流活动评选结果的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026092211315648073/index.shtml", "date": "2026-09-22", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186209.htm", "title": "辽工大创字〔2026〕122号关于举办辽宁工业大学2026年辽宁省第九届研究生先进连接技术竞赛暨省赛选拔赛的...", "url": "https://cxcy.lnut.edu.cn/info/14428/186209.htm", "date": "2026-09-16", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["竞赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186208.htm", "title": "辽工大创字〔2026〕121号关于举办辽宁工业大学2026年第一届辽宁省大学生材料焊接与铸造工艺设计大赛暨省...", "url": "https://cxcy.lnut.edu.cn/info/14428/186208.htm", "date": "2026-09-14", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186201.htm", "title": "辽工大创字〔2026〕118号关于举办辽宁工业大学2026年第十八届全国大学生数学竞赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186201.htm", "date": "2026-09-08", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["竞赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186198.htm", "title": "辽工大创字〔2026〕117号关于对辽宁工业大学2026年大学生创新训练计划项目立项结果的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186198.htm", "date": "2026-09-07", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["训练计划"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186197.htm", "title": "辽工大创字〔2026〕116号关于举办辽宁工业大学2026年辽宁省大学生虚拟现实与新媒体创新设计大赛暨省赛选...", "url": "https://cxcy.lnut.edu.cn/info/14428/186197.htm", "date": "2026-09-04", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186189.htm", "title": "辽工大创字〔2026〕114号关于举办辽宁工业大学2026年第四届辽宁省大学生文化创意设计大赛暨省赛选拔赛的...", "url": "https://cxcy.lnut.edu.cn/info/14428/186189.htm", "date": "2026-09-01", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186177.htm", "title": "辽工大创字〔2026〕112号关于举办辽宁工业大学2026年全球校园人工智能算法精英大赛暨省赛（国赛）选拔赛...", "url": "https://cxcy.lnut.edu.cn/info/14428/186177.htm", "date": "2026-08-31", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026082516274142979/index.shtml", "title": "辽宁省教育厅转发《教育部办公厅做好庆祝第42个教师节有关工作的通知》", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026082516274142979/index.shtml", "date": "2026-08-25", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186179.htm", "title": "辽工大创字〔2026〕111号关于举办辽宁工业大学2026年“高教社杯”全国大学生数学建模竞赛暨辽宁赛区选拔...", "url": "https://cxcy.lnut.edu.cn/info/14428/186179.htm", "date": "2026-08-06", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["竞赛", "赛区"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186178.htm", "title": "辽工大创字〔2026〕110号关于举办辽宁工业大学2026年“华为杯”第二十三届中国研究生数学建模竞赛暨国赛...", "url": "https://cxcy.lnut.edu.cn/info/14428/186178.htm", "date": "2026-08-06", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["竞赛", "赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026080318202033824/index.shtml", "title": "辽宁省高中等教育招生考试委员会办公室2026年集中面向社会公开招聘拟聘人员公示", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026080318202033824/index.shtml", "date": "2026-08-03", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026073115062069769/index.shtml", "title": "关于开展辽宁省2027年职业院校教师素质提高计划培训项目遴选工作的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026073115062069769/index.shtml", "date": "2026-07-31", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186168.htm", "title": "辽工大创字〔2026〕108号关于参加2026年“挑战杯”东北振兴产业升级专项赛赛事的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186168.htm", "date": "2026-07-21", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["挑战杯", "赛事", "赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026071611254462723/index.shtml", "title": "辽宁省高中等教育招生考试委员会办公室2026年公开招聘递补人员公告", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026071611254462723/index.shtml", "date": "2026-07-16", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026071614411162063/index.shtml", "title": "关于举办2026年辽宁省职业院校技能大赛教学能力比赛的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026071614411162063/index.shtml", "date": "2026-07-16", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": true, "tags": ["大赛", "赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026070911305693309/index.shtml", "title": "关于印发《辽宁省“人工智能+教育”高质量发展行动方案》的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026070911305693309/index.shtml", "date": "2026-07-09", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186166.htm", "title": "辽工大创字〔2026〕106号关于举办辽宁工业大学2026年中国研究生“双碳”创新与创意大赛暨省赛选拔赛的通...", "url": "https://cxcy.lnut.edu.cn/info/14428/186166.htm", "date": "2026-07-07", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026070709145376411/index.shtml", "title": "辽宁省教育厅关于2026年国家留学基金委辽宁省地方合作项目拟推荐人选的公示", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026070709145376411/index.shtml", "date": "2026-07-07", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186164.htm", "title": "辽工大创字〔2026〕104号关于辽宁工业大学众创空间第七届创新创业选育团队（项目）评审结果的公示", "url": "https://cxcy.lnut.edu.cn/info/14428/186164.htm", "date": "2026-07-03", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["创新创业", "评审"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026070216020578630/index.shtml", "title": "关于2024年度辽宁省高校党建研究课题拟结题课题的公示", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026070216020578630/index.shtml", "date": "2026-07-02", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186162.htm", "title": "辽工大创字〔2026〕103号关于举办辽宁工业大学2026年大学生英语短视频比赛暨“外教社杯”全国高校学生跨...", "url": "https://cxcy.lnut.edu.cn/info/14428/186162.htm", "date": "2026-07-01", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186161.htm", "title": "关于第十五届“挑战杯”大学生创业计划竞赛“揭榜挂帅”专项赛跨校组队参赛项目的公示", "url": "https://cxcy.lnut.edu.cn/info/14428/186161.htm", "date": "2026-07-01", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["挑战杯", "大学生创业", "竞赛", "参赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186160.htm", "title": "辽工大创字〔2026〕102号关于举办辽宁工业大学2026年第八届中国研究生机器人创新设计大赛暨初赛选拔赛的...", "url": "https://cxcy.lnut.edu.cn/info/14428/186160.htm", "date": "2026-06-29", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026062918420237462/index.shtml", "title": "关于表彰辽宁省高校优秀共产党员、优秀党务工作者和先进基层党组织的决定", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026062918420237462/index.shtml", "date": "2026-06-29", "sourceKey": "gsgg", "source": "辽宁省教育厅 · 公示公告", "category": "公示公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186159.htm", "title": "辽工大创字〔2026〕101号关于举办辽宁工业大学2026年第九届大学生智能制造创新竞赛暨东北赛区选拔赛的通...", "url": "https://cxcy.lnut.edu.cn/info/14428/186159.htm", "date": "2026-06-26", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["竞赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186158.htm", "title": "辽工大创字〔2026〕100号关于举办辽宁工业大学2026年中国大学生机械工程创新创意大赛物流技术创意赛暨东...", "url": "https://cxcy.lnut.edu.cn/info/14428/186158.htm", "date": "2026-06-26", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186157.htm", "title": "辽工大创字〔2026〕99号关于举办辽宁工业大学2026年大学生工程实践与创新能力大赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186157.htm", "date": "2026-06-24", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186156.htm", "title": "关于推荐第十五届“挑战杯”中国大学生创业计划竞赛入围作品公示", "url": "https://cxcy.lnut.edu.cn/info/14428/186156.htm", "date": "2026-06-18", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["挑战杯", "大学生创业", "竞赛", "赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026061814553563451/index.shtml", "title": "关于公布2026年辽宁省职业教育与继续教育教学成果展示大赛获奖名单的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026061814553563451/index.shtml", "date": "2026-06-18", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": true, "tags": ["大赛", "获奖名单"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186155.htm", "title": "辽工大创字〔2026〕98号关于举办辽宁工业大学2026年“枫叶优体”杯辽宁省大学生中华优秀传统文化创新设...", "url": "https://cxcy.lnut.edu.cn/info/14428/186155.htm", "date": "2026-06-17", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186154.htm", "title": "辽工大创字〔2026〕97号关于举办辽宁工业大学2026年第十二届中国研究生未来飞行器创新大赛暨初赛选拔赛...", "url": "https://cxcy.lnut.edu.cn/info/14428/186154.htm", "date": "2026-06-16", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["创新大赛", "大赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186153.htm", "title": "辽工大创字〔2026〕96号关于举办辽宁工业大学2026年第八届中国研究生人工智能创新大赛暨国赛选拔赛的通...", "url": "https://cxcy.lnut.edu.cn/info/14428/186153.htm", "date": "2026-06-15", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["创新大赛", "大赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186152.htm", "title": "辽工大创字〔2026〕95号关于辽宁工业大学2026年大学生创新创业训练计划项目评审结果的公示", "url": "https://cxcy.lnut.edu.cn/info/14428/186152.htm", "date": "2026-06-15", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["创新创业", "训练计划", "评审"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186151.htm", "title": "辽工大创字〔2026〕94号关于举办辽宁工业大学2026年辽宁省大学生数学建模竞赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186151.htm", "date": "2026-06-10", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["竞赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186149.htm", "title": "辽工大创字〔2026〕92号关于遴选辽宁工业大学众创空间第七届创新创业选育项目（团队）的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186149.htm", "date": "2026-06-09", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["创新创业"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186147.htm", "title": "辽工大创字〔2026〕90号关于开展举办辽宁工业大学2026年大学生工业设计竞赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186147.htm", "date": "2026-06-04", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["竞赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186146.htm", "title": "辽工大创字〔2026〕89号关于举办辽宁工业大学2026年三维数字化创新设计大赛暨省赛选拔赛的通知", "url": "https://cxcy.lnut.edu.cn/info/14428/186146.htm", "date": "2026-06-04", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大赛", "选拔赛"], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186145.htm", "title": "辽工大创字〔2026〕88号关于举办辽宁工业大学2026年“外研社·国才杯”“理解当代中国”全国大学生外语能...", "url": "https://cxcy.lnut.edu.cn/info/14428/186145.htm", "date": "2026-06-04", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": false, "tags": [], "isNew": false}, {"id": "https://cxcy.lnut.edu.cn/info/14428/186144.htm", "title": "辽工大创字〔2026〕87号关于举办辽宁工业大学2026年第十三届“学创杯”全国大学生创业综合模拟大赛暨省...", "url": "https://cxcy.lnut.edu.cn/info/14428/186144.htm", "date": "2026-06-03", "sourceKey": "lnut", "source": "辽宁工业大学 · 竞赛通知", "category": "高校竞赛通知", "cxcy": true, "tournament": true, "tags": ["大学生创业", "大赛", "赛"], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026052209072074547/index.shtml", "title": "关于印发《深入推进“高效办成教师资格认定一件事”工作方案》的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026052209072074547/index.shtml", "date": "2026-05-22", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026050716000585883/index.shtml", "title": "关于办好2026年职业教育活动周的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026050716000585883/index.shtml", "date": "2026-05-07", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026043017370277785/index.shtml", "title": "关于印发《辽宁省教育厅2026年生态环境保护教育工作计划》的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026043017370277785/index.shtml", "date": "2026-04-30", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026042710184055765/index.shtml", "title": "关于表扬2026届辽宁省普通高等学校优秀毕业生表扬对象的通报", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026042710184055765/index.shtml", "date": "2026-04-27", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026042016594745248/index.shtml", "title": "关于公布辽宁省2026届教育部直属师范大学公费师范毕业生就业双选会笔试成绩的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026042016594745248/index.shtml", "date": "2026-04-20", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026040321315996458/index.shtml", "title": "关于举办2026届教育部直属师范大学公费师范毕业生就业双选会的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026040321315996458/index.shtml", "date": "2026-04-03", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026013009101332298/index.shtml", "title": "关于公布2025年辽宁省职业教育精品在线开放课程名单的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026013009101332298/index.shtml", "date": "2026-01-30", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}, {"id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026012916351291714/index.shtml", "title": "关于公布2026年职业教育对口升学专升本专业综合课考试科目和技能考核要点的通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026012916351291714/index.shtml", "date": "2026-01-29", "sourceKey": "zxtz", "source": "辽宁省教育厅 · 最新通知", "category": "通知公告", "cxcy": false, "tournament": false, "tags": [], "isNew": false}], "counts": {"total": 70, "cxcy": 37, "tournament": 41, "new": 0}, "sources": [{"key": "zxtz", "name": "辽宁省教育厅 · 最新通知", "status": "ok", "count": 15}, {"key": "gsgg", "name": "辽宁省教育厅 · 公示公告", "status": "ok", "count": 14}, {"key": "jyyw", "name": "辽宁省教育厅 · 教育要闻", "status": "ok", "count": 4}, {"key": "lnut", "name": "辽宁工业大学 · 竞赛通知", "status": "ok", "count": 44}], "platform": {"ok": true, "name": "辽宁省大学生创新创业管理共享平台", "url": "https://cxcy.upln.cn/"}, "officialLinks": [{"name": "辽宁省大学生创新创业管理共享平台", "url": "https://cxcy.upln.cn/", "desc": "省赛报名、项目申报与评审公示主入口"}, {"name": "辽宁省教育厅 · 最新通知", "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/index.shtml", "desc": "省级大赛通知、实施方案的权威发布页"}, {"name": "辽宁省教育厅 · 公示公告", "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/index.shtml", "desc": "获奖名单、评审结果公示"}, {"name": "全国大学生创业服务网", "url": "https://cy.ncss.cn/", "desc": "中国国际大学生创新大赛等国家级赛事官方站点"}, {"name": "辽宁省教育厅 · 门户首页", "url": "https://jyt.ln.gov.cn/", "desc": "省教育厅官方门户"}]};</script>
+<script>
+(function () {
+  "use strict";
+
+  var EMBED = window.__EMBEDDED_DATA__ || null;
+
+  var state = {
+    data: null,
+    tab: "all",
+    keyword: "",
+    timer: null
+  };
+
+  var el = {
+    list: document.getElementById("noticeList"),
+    empty: document.getElementById("emptyTip"),
+    tabs: document.getElementById("tabs"),
+    search: document.getElementById("searchInput"),
+    refresh: document.getElementById("refreshBtn"),
+    lastSync: document.getElementById("lastSync"),
+    nextSync: document.getElementById("nextSync"),
+    countdown: document.getElementById("countdown"),
+    total: document.getElementById("totalCount"),
+    newCount: document.getElementById("newCount"),
+    platform: document.getElementById("platformState"),
+    platformLink: document.getElementById("platformLink"),
+    official: document.getElementById("officialLinks"),
+    sources: document.getElementById("sourceList"),
+    syncHour: document.getElementById("syncHour"),
+    footTime: document.getElementById("footTime"),
+    mask: document.getElementById("drawerMask"),
+    drawer: document.getElementById("drawer"),
+    drawerTitle: document.getElementById("drawerTitle"),
+    drawerMeta: document.getElementById("drawerMeta"),
+    drawerBody: document.getElementById("drawerBody"),
+    drawerOpen: document.getElementById("drawerOpen"),
+    drawerClose: document.getElementById("drawerClose")
+  };
+
+  var CATEGORY_TAG = {
+    "通知公告": "zxtz",
+    "公示公告": "gsgg",
+    "赛事动态": "race",
+    "高校竞赛通知": "cxcy"
+  };
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+  function fmtTime(iso) {
+    if (!iso) return "—";
+    return iso.replace("T", " ");
+  }
+
+  function matches(item, tab, kw) {
+    if (tab === "cxcy" && !item.cxcy) return false;
+    if (tab === "tournament" && !item.tournament) return false;
+    if (tab === "zxtz" && item.sourceKey !== "zxtz") return false;
+    if (tab === "gsgg" && item.sourceKey !== "gsgg") return false;
+    if (tab === "lnut" && item.sourceKey !== "lnut") return false;
+    if (!kw) return true;
+    var hay = (item.title || "") + " " + (item.source || "") + " " + (item.tags || []).join(" ");
+    return hay.toLowerCase().indexOf(kw.toLowerCase()) !== -1;
+  }
+
+  function renderList() {
+    if (!state.data) return;
+    var items = state.data.items || [];
+    var kw = state.keyword.trim();
+    var shown = items.filter(function (it) { return matches(it, state.tab, kw); });
+
+    el.empty.hidden = shown.length > 0;
+    if (!shown.length) {
+      el.list.innerHTML = "";
+      return;
+    }
+
+    el.list.innerHTML = shown.map(function (it) {
+      var badges = [];
+      var catCls = CATEGORY_TAG[it.category] || "";
+      badges.push('<span class="badge ' + catCls + '">' + esc(it.category) + "</span>");
+      if (it.cxcy && it.category !== "高校竞赛通知") badges.push('<span class="badge cxcy">创新创业</span>');
+      if (it.isNew) badges.push('<span class="badge fresh">新</span>');
+
+      var tags = (it.tags || []).filter(function (t) { return t.length > 1; }).slice(0, 2).map(function (t) {
+        return '<span class="badge">' + esc(t) + "</span>";
+      }).join("");
+
+      return '<li class="notice" data-url="' + esc(it.url) + '" data-id="' + esc(it.id) + '" tabindex="0">' +
+        '<div class="notice-top">' + badges.join("") + tags + "</div>" +
+        "<h3>" + esc(it.title) + "</h3>" +
+        '<div class="notice-meta">' +
+          "<span>" + esc(it.date || "日期以官方页面为准") + "</span>" +
+          "<span>" + esc(it.source) + "</span>" +
+        "</div>" +
+        '<span class="go">查看原文 →</span>' +
+        "</li>";
+    }).join("");
+  }
+
+  function renderCounts() {
+    if (!state.data) return;
+    var items = state.data.items || [];
+    var c = state.data.counts || {};
+    el.total.textContent = items.length;
+    if (c.new) {
+      el.newCount.textContent = "新增 " + c.new;
+    } else {
+      el.newCount.textContent = "";
+    }
+    var nums = { all: items.length, cxcy: c.cxcy || 0, tournament: c.tournament || 0 };
+    Object.keys(nums).forEach(function (k) {
+      var node = el.tabs.querySelector('[data-num="' + k + '"]');
+      if (node) node.textContent = nums[k];
+    });
+  }
+
+  function renderSide() {
+    if (!state.data) return;
+    el.official.innerHTML = (state.data.officialLinks || []).map(function (l) {
+      return '<li><a href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' +
+        "<strong>" + esc(l.name) + " ↗</strong>" +
+        "<small>" + esc(l.desc || "") + "</small></a></li>";
+    }).join("");
+
+    el.sources.innerHTML = (state.data.sources || []).map(function (s) {
+      var label = "正常 " + (s.count || 0) + " 条";
+      var cls = "s-ok";
+      if (s.status !== "ok") { label = "抓取失败"; cls = "s-bad"; }
+      else if (s.stale) { label = "沿用缓存"; cls = "s-stale"; }
+      return '<li><span class="s-name" title="' + esc(s.name) + '">' + esc(s.name) + "</span>" +
+        '<span class="' + cls + '">' + label + "</span></li>";
+    }).join("");
+
+    var p = state.data.platform || {};
+    if (p.ok) {
+      el.platform.textContent = "可访问";
+      el.platform.className = "state ok";
+      el.platform.title = (p.title || "") + " · 检测于 " + (p.checkedAt || "");
+    } else {
+      el.platform.textContent = "暂不可达";
+      el.platform.className = "state bad";
+      el.platform.title = p.error || "";
+    }
+
+    if (state.data.syncHour != null) {
+      el.syncHour.textContent = pad(state.data.syncHour) + ":00";
+    }
+  }
+
+  function tickCountdown() {
+    if (!state.data || !state.data.nextSync) {
+      el.countdown.textContent = "";
+      return;
+    }
+    var target = new Date(state.data.nextSync.replace(/-/g, "/")).getTime();
+    var diff = target - Date.now();
+    if (diff <= 0) {
+      el.countdown.textContent = "即将同步…";
+      return;
+    }
+    var h = Math.floor(diff / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    el.countdown.textContent = "还有 " + pad(h) + ":" + pad(m) + ":" + pad(s);
+  }
+
+  function openFromQuery() {
+    var target = new URLSearchParams(location.search).get("view");
+    if (!target || !state.data) return;
+    var item = (state.data.items || []).filter(function (x) {
+      return x.url === target || x.id === target;
+    })[0];
+    if (item) openDrawer(item);
+  }
+
+  function applyData(payload) {
+    state.data = payload;
+    el.lastSync.textContent = fmtTime(payload.generatedAt);
+    el.nextSync.textContent = fmtTime(payload.nextSync);
+    el.nextSync.title = "服务运行期间每天自动同步一次";
+    renderCounts();
+    renderList();
+    renderSide();
+    tickCountdown();
+    openFromQuery();
+  }
+
+  function load() {
+    if (EMBED) {
+      document.body.setAttribute("data-mode", "static");
+      applyData(EMBED);
+      if (el.refresh) el.refresh.hidden = true;
+      return;
+    }
+    el.list.innerHTML = '<li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li>';
+    return fetch("/api/data", { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(applyData)
+      .catch(function () {
+        el.list.innerHTML = "";
+        el.empty.hidden = false;
+        el.empty.textContent = "读取本地数据失败，请确认服务已启动（python server.py）。";
+      });
+  }
+
+  function doRefresh() {
+    if (EMBED || !el.refresh) return;
+    el.refresh.disabled = true;
+    el.refresh.textContent = "同步中…";
+    fetch("/api/refresh", { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res.ok) applyData(res.data);
+      })
+      .catch(function () {})
+      .then(function () {
+        el.refresh.disabled = false;
+        el.refresh.textContent = "立即同步";
+        clearTimeout(state.timer);
+      });
+  }
+
+  /* ------------------------------------------------------------ drawer */
+  function openDrawer(item) {
+    var title = item.title;
+    el.drawerTitle.textContent = title;
+    el.drawerMeta.textContent = [item.date, item.source].filter(Boolean).join(" · ");
+    el.drawerOpen.href = item.url;
+    el.drawerBody.innerHTML = '<p class="loading-line">正在从官方页面读取原文…</p>';
+    el.drawer.hidden = false;
+    el.mask.hidden = false;
+    document.body.style.overflow = "hidden";
+
+    if (EMBED) {
+      el.drawerBody.innerHTML = "<p>这份文件是离线快照，未内置正文。</p><p>点击下方「打开官方原文 ↗」可查看官方全文，标题、日期与链接均为官方原始内容。</p>";
+      return;
+    }
+
+    fetch("/api/preview?url=" + encodeURIComponent(item.url), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res.ok && res.article && res.article.html) {
+          el.drawerBody.innerHTML = res.article.html;
+        } else {
+          el.drawerBody.innerHTML = '<p>（预览暂不可用：' + esc((res && res.error) || "未知错误") +
+            '）请点击下方「打开官方原文」查看。</p>';
+        }
+      })
+      .catch(function () {
+        el.drawerBody.innerHTML = '<p>（网络异常，无法读取原文）请点击下方「打开官方原文」查看。</p>';
+      });
+  }
+
+  function closeDrawer() {
+    el.drawer.hidden = true;
+    el.mask.hidden = true;
+    document.body.style.overflow = "";
+    el.drawerBody.innerHTML = "";
+  }
+
+  /* ------------------------------------------------------------ events */
+  el.list.addEventListener("click", function (e) {
+    var li = e.target.closest(".notice");
+    if (!li || !state.data) return;
+    var item = (state.data.items || []).filter(function (x) { return x.id === li.dataset.id; })[0];
+    if (item) openDrawer(item);
+  });
+
+  el.list.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var li = e.target.closest(".notice");
+    if (!li) return;
+    e.preventDefault();
+    li.click();
+  });
+
+  el.tabs.addEventListener("click", function (e) {
+    var btn = e.target.closest(".tab");
+    if (!btn) return;
+    Array.prototype.forEach.call(el.tabs.querySelectorAll(".tab"), function (b) {
+      b.classList.toggle("active", b === btn);
+    });
+    state.tab = btn.dataset.tab;
+    renderList();
+  });
+
+  var searchTimer = null;
+  el.search.addEventListener("input", function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function () {
+      state.keyword = el.search.value;
+      renderList();
+    }, 160);
+  });
+
+  if (el.refresh) el.refresh.addEventListener("click", doRefresh);
+  el.drawerClose.addEventListener("click", closeDrawer);
+  el.mask.addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !el.drawer.hidden) closeDrawer();
+  });
+
+  el.footTime.textContent = "页面加载时间 " + new Date().toLocaleString("zh-CN", { hour12: false });
+
+  setInterval(tickCountdown, 1000);
+  setInterval(function () {
+    if (state.data) {
+      var target = new Date(String(state.data.nextSync || "").replace(/-/g, "/")).getTime();
+      if (target && Date.now() > target + 5000) load();
+    }
+  }, 60000);
+
+  load();
+})();
+
+</script>
+</body>
+</html>
