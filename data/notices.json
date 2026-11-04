@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-05 06:44:10",
+ "generatedAt": "2026-11-05 06:46:16",
  "nextSync": "2026-11-05 08:00:00",
  "items": [
   {
@@ -52,7 +52,8 @@
    "signupEnd": "2026-11-07 23:59:59",
    "state": "报名中",
    "synopsis": "第一届辽宁省大学生外语综合技能创新挑战赛",
-   "isNew": true
+   "isNew": false,
+   "stale": true
   },
   {
    "id": "upln_fa8ad98b07c786f3fdccaa4fc7c9a7e1",
@@ -72,7 +73,8 @@
    "signupEnd": "2026-11-09 23:59:59",
    "state": "报名中",
    "synopsis": "辽宁省两岸新锐设计竞赛“华灿奖”",
-   "isNew": true
+   "isNew": false,
+   "stale": true
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811252046399/index.shtml",
@@ -165,7 +167,8 @@
    "signupEnd": "2026-11-10 23:59:59",
    "state": "报名中",
    "synopsis": "辽宁省大学生智慧海洋科技创新大赛",
-   "isNew": true
+   "isNew": false,
+   "stale": true
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102315324974098/index.shtml",
@@ -224,7 +227,8 @@
    "signupEnd": "2026-10-25 23:59:59",
    "state": "已结束",
    "synopsis": "2026年第18届全国大学生广告艺术大赛（辽宁赛区）",
-   "isNew": true
+   "isNew": false,
+   "stale": true
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026102110290659632/index.shtml",
@@ -1125,7 +1129,7 @@
   "cxcy": 41,
   "tournament": 45,
   "upln": 4,
-  "new": 4
+  "new": 0
  },
  "sources": [
   {
@@ -1155,15 +1159,17 @@
   {
    "key": "upln",
    "name": "辽宁省双创平台 · 竞赛大厅",
-   "status": "ok",
-   "count": 4
+   "status": "stale",
+   "count": 4,
+   "error": "https://cxcy.upln.cn/provincial/match/competition/queryShow?pageNo=1&pageSize=100: URLError"
   }
  ],
  "platform": {
-  "ok": true,
-  "status": "ok",
+  "ok": false,
+  "status": "unknown",
   "name": "辽宁省大学生创新创业管理共享平台",
-  "url": "https://cxcy.upln.cn/"
+  "url": "https://cxcy.upln.cn/",
+  "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
  },
  "officialLinks": [
   {
