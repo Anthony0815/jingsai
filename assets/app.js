@@ -40,7 +40,8 @@
     "通知公告": "zxtz",
     "公示公告": "gsgg",
     "赛事动态": "race",
-    "高校竞赛通知": "cxcy"
+    "高校竞赛通知": "cxcy",
+    "省双创竞赛": "upln"
   };
 
   function esc(s) {
@@ -50,6 +51,18 @@
   }
 
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+  function shortDay(v) {
+    // 2026-11-01 00:00:00 -> 11-01
+    var s = String(v || "");
+    return s.length >= 10 ? s.slice(5, 10) : s;
+  }
+
+  function stateClass(s) {
+    if (s === "报名中") return "st-live";
+    if (s === "即将开始") return "st-soon";
+    return "st-end";
+  }
 
   function fmtTime(iso) {
     if (!iso) return "—";
@@ -62,6 +75,7 @@
     if (tab === "zxtz" && item.sourceKey !== "zxtz") return false;
     if (tab === "gsgg" && item.sourceKey !== "gsgg") return false;
     if (tab === "lnut" && item.sourceKey !== "lnut") return false;
+    if (tab === "upln" && item.sourceKey !== "upln") return false;
     if (!kw) return true;
     var hay = (item.title || "") + " " + (item.source || "") + " " + (item.tags || []).join(" ");
     return hay.toLowerCase().indexOf(kw.toLowerCase()) !== -1;
@@ -84,19 +98,25 @@
       var catCls = CATEGORY_TAG[it.category] || "";
       badges.push('<span class="badge ' + catCls + '">' + esc(it.category) + "</span>");
       if (it.cxcy && it.category !== "高校竞赛通知") badges.push('<span class="badge cxcy">创新创业</span>');
+      if (it.state) badges.push('<span class="badge st ' + stateClass(it.state) + '">' + esc(it.state) + "</span>");
       if (it.isNew) badges.push('<span class="badge fresh">新</span>');
 
-      var tags = (it.tags || []).filter(function (t) { return t.length > 1; }).slice(0, 2).map(function (t) {
+      var tags = (it.tags || []).filter(function (t) {
+        return t.length > 1 && t !== it.state;
+      }).slice(0, 2).map(function (t) {
         return '<span class="badge">' + esc(t) + "</span>";
       }).join("");
+
+      var meta = "<span>" + esc(it.date || "日期以官方页面为准") + "</span>" +
+        "<span>" + esc(it.source) + "</span>";
+      if (it.signupStart && it.signupEnd) {
+        meta += "<span>报名 " + esc(shortDay(it.signupStart)) + " 至 " + esc(shortDay(it.signupEnd)) + "</span>";
+      }
 
       return '<li class="notice" data-url="' + esc(it.url) + '" data-id="' + esc(it.id) + '" tabindex="0">' +
         '<div class="notice-top">' + badges.join("") + tags + "</div>" +
         "<h3>" + esc(it.title) + "</h3>" +
-        '<div class="notice-meta">' +
-          "<span>" + esc(it.date || "日期以官方页面为准") + "</span>" +
-          "<span>" + esc(it.source) + "</span>" +
-        "</div>" +
+        '<div class="notice-meta">' + meta + "</div>" +
         '<span class="go">查看原文 →</span>' +
         "</li>";
     }).join("");
@@ -112,7 +132,7 @@
     } else {
       el.newCount.textContent = "";
     }
-    var nums = { all: items.length, cxcy: c.cxcy || 0, tournament: c.tournament || 0 };
+    var nums = { all: items.length, cxcy: c.cxcy || 0, tournament: c.tournament || 0, upln: c.upln || 0 };
     Object.keys(nums).forEach(function (k) {
       var node = el.tabs.querySelector('[data-num="' + k + '"]');
       if (node) node.textContent = nums[k];

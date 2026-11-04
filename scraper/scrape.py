@@ -36,6 +36,9 @@ SOURCES = [
      "url": "https://cxcy.lnut.edu.cn/scjs/jstz.htm", "filter": "all",
      "parser": "li", "forceCxcy": True,
      "pages": ["https://cxcy.lnut.edu.cn/scjs/jstz/27.htm"]},
+    {"key": "upln", "name": "辽宁省双创平台 · 竞赛大厅", "category": "省双创竞赛",
+     "filter": "all", "api": True,
+     "url": "https://cxcy.upln.cn/provincial/match/competition/queryShow?pageNo=1&pageSize=100"},
 ]
 
 KEYWORDS_CXCY = [
@@ -193,6 +196,70 @@ def parse_list_li(text: str, source: dict):
     return items
 
 
+def fetch_json(url: str, timeout: int = 30, retries: int = 2):
+    """请求平台的 JSON 接口（需带 Referer/Origin，否则会被网关拦下）。"""
+    req = urllib.request.Request(url, headers={
+        "User-Agent": UA,
+        "Accept": "application/json, text/plain, */*",
+        "Referer": "https://cxcy.upln.cn/match",
+        "Origin": "https://cxcy.upln.cn",
+    })
+    last = None
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout, context=CTX) as resp:
+                return json.loads(resp.read().decode("utf-8", "replace"))
+        except Exception as exc:
+            last = exc
+            if attempt + 1 >= retries:
+                raise
+    raise last  # pragma: no cover
+
+
+def parse_upln(data, source: dict):
+    """解析省双创平台「竞赛大厅」接口返回的竞赛列表。"""
+    if isinstance(data, str):
+        data = json.loads(data)
+    rows = data.get("result") or []
+    if isinstance(rows, dict):
+        rows = rows.get("records") or []
+    now = dt.datetime.now(TZ).strftime("%Y-%m-%d %H:%M:%S")
+    items = []
+    for row in rows:
+        title = clean(str(row.get("name") or ""))
+        cid = str(row.get("id") or "")
+        if len(title) < 4 or not cid:
+            continue
+        start = str(row.get("startTime") or "")[:19]
+        end = str(row.get("endTime") or "")[:19]
+        date = parse_date(start)
+        if not date:
+            continue
+        if now < start:
+            state = "即将开始"
+        elif now <= end:
+            state = "报名中"
+        else:
+            state = "已结束"
+        items.append({
+            "id": "upln_" + cid,
+            "title": title,
+            "url": "https://cxcy.upln.cn/match/details?comId=" + cid,
+            "date": date,
+            "sourceKey": source["key"],
+            "source": source["name"],
+            "category": source["category"],
+            "cxcy": True,
+            "tournament": True,
+            "tags": [state, "省平台"],
+            "signupStart": start,
+            "signupEnd": end,
+            "state": state,
+            "synopsis": clean(str(row.get("synopsis") or ""))[:120],
+        })
+    return items
+
+
 def next_sync_time(now: dt.datetime) -> str:
     local = now.astimezone(TZ)
     target = local.replace(hour=SYNC_HOUR, minute=0, second=0, microsecond=0)
@@ -217,7 +284,10 @@ def main() -> int:
         got, errors = [], []
         for page_url in pages:
             try:
-                got.extend(parser(fetch(page_url), source))
+                if source.get("api"):
+                    got.extend(parse_upln(fetch_json(page_url), source))
+                else:
+                    got.extend(parser(fetch(page_url), source))
             except Exception as exc:  # 单页失败不影响其它页
                 errors.append("%s: %s" % (page_url, exc.__class__.__name__))
         if got:
@@ -267,6 +337,7 @@ def main() -> int:
             "total": len(deduped),
             "cxcy": sum(1 for x in deduped if x.get("cxcy")),
             "tournament": sum(1 for x in deduped if x.get("tournament")),
+            "upln": sum(1 for x in deduped if x.get("sourceKey") == "upln"),
             "new": sum(1 for x in deduped if x.get("isNew")),
         },
         "sources": sources_status,
