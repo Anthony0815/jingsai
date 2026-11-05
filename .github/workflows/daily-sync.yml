@@ -1,17 +1,17 @@
-name: 每日同步官方通知
+name: 每小时同步官方通知
 
 on:
   schedule:
-    # 北京时间每天 08:00（UTC 00:00）
-    - cron: "0 0 * * *"
+    # 每小时整点（UTC 整点 = 北京整点）跑一次；内容没变化就不会产生提交
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: daily-sync
-  cancel-in-progress: true
+  group: hourly-sync
+  cancel-in-progress: false
 
 jobs:
   sync:
@@ -34,7 +34,23 @@ jobs:
       - name: 生成静态页面
         run: python tools/build_page.py
 
+      # 线上已经是同一份内容（同样的 build + data 指纹）就整轮跳过，避免每小时刷提交
+      - name: 判断是否需要发布
+        id: gate
+        run: |
+          set +e
+          python tools/should_publish.py
+          code=$?
+          set -e
+          if [ "$code" = "3" ]; then
+            echo "need=0" >> "$GITHUB_OUTPUT"
+            echo "线上内容一致，本轮不发布"
+          else
+            echo "need=1" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: 提交并推送
+        if: steps.gate.outputs.need == '1'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -42,13 +58,13 @@ jobs:
           if git diff --cached --quiet; then
             echo "没有变化，跳过提交"
           else
-            git commit -m "chore: 同步官方通知 $(TZ=Asia/Shanghai date +%F)"
+            git commit -m "chore: 同步官方通知 $(TZ=Asia/Shanghai date '+%F %H:%M')"
             git push
           fi
 
       # 云端发布到 PocketBay：本机不开机也能更新（无需本机计划任务）
       - name: 发布到 PocketBay
-        if: env.POCKETBAY_TOKEN != ''
+        if: steps.gate.outputs.need == '1' && env.POCKETBAY_TOKEN != ''
         continue-on-error: true
         run: |
           python -c "import zipfile; z=zipfile.ZipFile('pocketbay.zip','w',zipfile.ZIP_DEFLATED); z.write('index.html'); z.close(); print('zip ok')"

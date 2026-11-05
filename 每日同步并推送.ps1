@@ -1,10 +1,11 @@
 ﻿param([switch]$RunNow, [switch]$Force, [switch]$LogonGuard)
 
-# 本机每日同步：抓取官方页面 -> 重新构建 index.html -> 推送到 GitHub + 部署 PocketBay
+# 本机同步：抓取官方页面 -> 重新构建 index.html -> 推 GitHub + 部署 PocketBay
 # 触发方式：
-#   1) 计划任务 LN-CXCY-GitHubSync 每天 08:00；错过时由 Windows 的「错过则尽快启动」补跑
-#   2) 登录启动项 开机补跑.vbs（带 -LogonGuard），当天没同步过就补跑一次
-#   3) 双击 立即同步.bat（等于带 -RunNow -Force）
+#   1) 每小时守护进程 tools/每小时同步.py（登录后常驻，整点跑一次；内容没变就只检查不发布）
+#   2) 计划任务 LN-CXCY-GitHubSync 每天 08:00（错过时由 Windows 补跑）作为兜底
+#   3) 登录启动项 开机补跑.vbs（带 -LogonGuard），当天没同步过就补跑一次
+#   4) 双击 立即同步.bat（等于带 -RunNow -Force）
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
@@ -37,51 +38,43 @@ if ($LogonGuard) {
 try {
   $dataFile = Join-Path $root "data/notices.json"
   $indexFile = Join-Path $root "index.html"
-  $ghFile = Join-Path $root "data/.pushed-sha"
-  $pbFile = Join-Path $root "data/.pocketbay-sha"
-
-  $ghSha = ""
-  if (Test-Path $ghFile) { $ghSha = (Get-Content $ghFile -Raw -Encoding UTF8).Trim() }
-  $pbSha = ""
-  if (Test-Path $pbFile) { $pbSha = (Get-Content $pbFile -Raw -Encoding UTF8).Trim() }
 
   $out = & python "scraper/scrape.py" 2>&1
   Write-Log ("抓取完成: " + ($out -join " "))
 
-  $null = & python "tools/build_page.py" 2>&1
-  Write-Log "页面构建完成"
+  $buildOut = & python "tools/build_page.py" 2>&1
+  Write-Log ("页面构建完成: " + (($buildOut | Select-Object -Last 1) -join " "))
 
   $new = Get-Content $dataFile -Raw -Encoding UTF8 | ConvertFrom-Json
-  $gen = [string]$new.generatedAt
-  # 用构建产物哈希判断内容是否真有变化，避免重复提交/重复部署
-  $sha = (Get-FileHash -Path $indexFile -Algorithm SHA256).Hash
 
-  # GitHub
-  if ($sha -eq $ghSha) {
-    Write-Log ("GitHub 无变化，跳过推送（" + $new.counts.total + " 条）")
+  # 线上指纹（build + data-digest）与本地一致就跳过发布，避免每小时刷提交
+  $needPublish = $true
+  if (-not $Force) {
+    $gate = & python "tools/should_publish.py" 2>&1
+    $gateText = ($gate -join " ")
+    $gateLines = $gate | Where-Object { $_ -match "^(build|data|结论|读取)" }
+    foreach ($l in $gateLines) { Write-Log ("发布判定: " + $l) }
+    if ($gateText -match "NEED_PUBLISH=0") { $needPublish = $false }
   } else {
-    $push = & (Join-Path $root "tools/push_via_api.ps1") 2>&1
-    $pushText = ($push -join " ")
-    Write-Log ("推送结果: " + $pushText)
-    if ($pushText -match "pushed|no change") {
-      Set-Content -Path $ghFile -Value $sha -Encoding UTF8 -NoNewline
-    }
+    Write-Log "发布判定: -Force 指定，强制发布"
   }
 
+  if (-not $needPublish) {
+    Set-Content -Path $markFile -Value (Get-Date -Format "yyyy-MM-dd HH:mm:ss") -Encoding UTF8 -NoNewline
+    Write-Log ("内容与线上一致，跳过发布（" + $new.counts.total + " 条）")
+    return
+  }
+
+  # GitHub Pages
+  $push = & (Join-Path $root "tools/push_via_api.ps1") 2>&1
+  Write-Log ("推送结果: " + (($push -join " ").Trim()))
+
   # PocketBay
-  if ($sha -eq $pbSha) {
-    Write-Log ("PocketBay 已是同一版本，跳过部署（" + $gen + "）")
-  } else {
-    try {
-      $pb = & (Join-Path $root "tools/deploy_pocketbay.ps1") -ProjectId 3681 2>&1
-      $pbText = ($pb -join " ")
-      Write-Log ("PocketBay 部署: " + $pbText)
-      if ($pbText -match "POCKETBAY_DEPLOY_OK") {
-        Set-Content -Path $pbFile -Value $sha -Encoding UTF8 -NoNewline
-      }
-    } catch {
-      Write-Log ("PocketBay 部署异常（不影响 GitHub）: " + $_.Exception.Message)
-    }
+  try {
+    $pb = & (Join-Path $root "tools/deploy_pocketbay.ps1") -ProjectId 3681 2>&1
+    Write-Log ("PocketBay 部署: " + (($pb -join " ").Trim()))
+  } catch {
+    Write-Log ("PocketBay 部署异常（不影响 GitHub）: " + $_.Exception.Message)
   }
 
   # 记录最近一次成功同步的时间，供开机补跑判断

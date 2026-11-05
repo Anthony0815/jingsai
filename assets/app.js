@@ -339,9 +339,9 @@
   }
 
   function nextSyncStr() {
+    // 云端每小时检查一次：下一次整点
     var d = new Date();
-    var t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8, 0, 0, 0);
-    if (d.getTime() >= t.getTime()) t = new Date(t.getTime() + 86400000);
+    var t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() + 1, 0, 0, 0);
     return t.getFullYear() + "-" + pad2(t.getMonth() + 1) + "-" + pad2(t.getDate()) + " " +
       pad2(t.getHours()) + ":" + pad2(t.getMinutes()) + ":" + pad2(t.getSeconds());
   }
