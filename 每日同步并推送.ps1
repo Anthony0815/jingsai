@@ -23,11 +23,10 @@ if ($RunNow) {
 
 try {
   $dataFile = Join-Path $root "data/notices.json"
-  $before = ""
-  if (Test-Path $dataFile) {
-    $old = Get-Content $dataFile -Raw -Encoding UTF8 | ConvertFrom-Json
-    $before = (($old.items | ForEach-Object { $_.url + "|" + $_.date }) -join "`n")
-  }
+  $indexFile = Join-Path $root "index.html"
+  $shaFile = Join-Path $root "data/.pushed-sha"
+  $lastSha = ""
+  if (Test-Path $shaFile) { $lastSha = (Get-Content $shaFile -Raw -Encoding UTF8).Trim() }
 
   $out = & python "scraper/scrape.py" 2>&1
   Write-Log ("抓取完成: " + ($out -join " "))
@@ -36,14 +35,19 @@ try {
   Write-Log "页面构建完成"
 
   $new = Get-Content $dataFile -Raw -Encoding UTF8 | ConvertFrom-Json
-  $after = (($new.items | ForEach-Object { $_.url + "|" + $_.date }) -join "`n")
   $gen = [string]$new.generatedAt
+  # 用构建产物的哈希判断是否需要推送（避免因数据文件已被更新而漏推）
+  $sha = (Get-FileHash -Path $indexFile -Algorithm SHA256).Hash
 
-  if ($after -eq $before) {
-    Write-Log ("内容无变化，跳过推送（" + $new.counts.total + " 条）")
+  if ($sha -eq $lastSha) {
+    Write-Log ("页面无变化，跳过推送（" + $new.counts.total + " 条）")
   } else {
     $push = & (Join-Path $root "tools/push_via_api.ps1") 2>&1
-    Write-Log ("推送结果: " + ($push -join " "))
+    $pushText = ($push -join " ")
+    Write-Log ("推送结果: " + $pushText)
+    if ($pushText -match "pushed|no change") {
+      Set-Content -Path $shaFile -Value $sha -Encoding UTF8 -NoNewline
+    }
   }
 
   # PocketBay 同步：按 generatedAt 判断，与 GitHub 推送互不影响

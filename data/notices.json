@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-05 08:21:05",
+ "generatedAt": "2026-11-05 08:54:11",
  "nextSync": "2026-11-06 08:00:00",
  "items": [
   {
@@ -75,6 +75,22 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3827.htm",
+   "title": "关于2027年中国大学生机械工程创新创意大赛铸造工艺设计赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3827.htm",
+   "date": "2026-10-30",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811252046399/index.shtml",
    "title": "绿茵牵两地 辽苏共成长！辽苏校园足球友谊赛在大连圆满落幕",
    "url": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811252046399/index.shtml",
@@ -145,6 +161,23 @@
    "cxcy": false,
    "tournament": false,
    "tags": [],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3826.htm",
+   "title": "关于2026年辽宁省大学生智慧海洋科技创新大赛校内选拔赛通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3826.htm",
+   "date": "2026-10-27",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新大赛",
+    "大赛",
+    "选拔赛"
+   ],
    "isNew": false
   },
   {
@@ -227,6 +260,22 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3824.htm",
+   "title": "关于2026年辽宁省大学生管理决策模拟大赛大学生领导力潜质提升赛道的校内选拔赛",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3824.htm",
+   "date": "2026-10-22",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026102110290659632/index.shtml",
    "title": "关于举办第四届全国大学生职业规划大赛辽宁省赛的通知",
    "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026102110290659632/index.shtml",
@@ -239,6 +288,22 @@
    "tags": [
     "大赛",
     "赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3823.htm",
+   "title": "关于2026辽宁省大学生动漫与媒体创意设计大赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3823.htm",
+   "date": "2026-10-21",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
    ],
    "isNew": false
   },
@@ -271,6 +336,55 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3822.htm",
+   "title": "关于2026年辽宁省大学生管理决策模拟大赛人力资源管理综合能力赛项校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3822.htm",
+   "date": "2026-10-20",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3820.htm",
+   "title": "关于2026辽宁省大学生医学创新大赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3820.htm",
+   "date": "2026-10-19",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新大赛",
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3821.htm",
+   "title": "关于2026年辽宁省大学生医药生物技术技能大赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3821.htm",
+   "date": "2026-10-19",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://cxcy.lnut.edu.cn/info/14428/186222.htm",
    "title": "辽工大创字〔2026〕131号关于举办辽宁工业大学2026年职业规划大赛暨省赛选拔赛的通知",
    "url": "https://cxcy.lnut.edu.cn/info/14428/186222.htm",
@@ -278,6 +392,54 @@
    "sourceKey": "lnut",
    "source": "辽宁工业大学 · 竞赛通知",
    "category": "高校竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3819.htm",
+   "title": "关于举办大连大学第二十一届“未来教师职业技能大赛”的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3819.htm",
+   "date": "2026-10-16",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3816.htm",
+   "title": "关于2026年第十四届全国大学生数字媒体科技作品及创意竞赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3816.htm",
+   "date": "2026-10-15",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "竞赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3817.htm",
+   "title": "关于2026年第十一届华为ICT大赛实践赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3817.htm",
+   "date": "2026-10-15",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
    "cxcy": true,
    "tournament": true,
    "tags": [
@@ -307,6 +469,72 @@
    "sourceKey": "lnut",
    "source": "辽宁工业大学 · 竞赛通知",
    "category": "高校竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "竞赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3815.htm",
+   "title": "关于辽宁省大学生科普设计大赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3815.htm",
+   "date": "2026-10-10",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3814.htm",
+   "title": "关于第十七届全国大学生市场调查与分析大赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3814.htm",
+   "date": "2026-10-10",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3813.htm",
+   "title": "关于2026年辽宁省大学生医药大健康创新创业大赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3813.htm",
+   "date": "2026-10-10",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新创业",
+    "创业大赛",
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3812.htm",
+   "title": "关于举办2026新锐设计竞赛·华灿奖校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3812.htm",
+   "date": "2026-10-09",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
    "cxcy": true,
    "tournament": true,
    "tags": [
@@ -358,6 +586,38 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3808.htm",
+   "title": "关于2026年辽宁省普通高等学校大学生应急救援创新设计大赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3808.htm",
+   "date": "2026-09-30",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3807.htm",
+   "title": "关于2026东北三省第七届适老化建筑设计竞赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3807.htm",
+   "date": "2026-09-29",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "竞赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026092814270877642/index.shtml",
    "title": "关于印发《辽宁省教育厅废止、失效和保留有效行政规范性文件目录（2026年）》的通知",
    "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026092814270877642/index.shtml",
@@ -378,6 +638,38 @@
    "sourceKey": "lnut",
    "source": "辽宁工业大学 · 竞赛通知",
    "category": "高校竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3805.htm",
+   "title": "关于2026年第五届辽宁省大学生商科综合能力大赛校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3805.htm",
+   "date": "2026-09-24",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1101/3806.htm",
+   "title": "关于2026“外研社·国才杯”“理解当代中国”全国大学生外语能力大赛英语组校内选拔赛的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1101/3806.htm",
+   "date": "2026-09-24",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
    "cxcy": true,
    "tournament": true,
    "tags": [
@@ -1121,10 +1413,11 @@
   }
  ],
  "counts": {
-  "total": 74,
-  "cxcy": 41,
-  "tournament": 45,
+  "total": 92,
+  "cxcy": 59,
+  "tournament": 63,
   "upln": 4,
+  "dlu": 18,
   "new": 0
  },
  "sources": [
@@ -1157,6 +1450,12 @@
    "name": "辽宁省双创平台 · 竞赛大厅",
    "status": "ok",
    "count": 4
+  },
+  {
+   "key": "dlu",
+   "name": "大连大学 · 创新创业竞赛",
+   "status": "ok",
+   "count": 18
   }
  ],
  "platform": {
@@ -1185,6 +1484,11 @@
    "name": "全国大学生创业服务网",
    "url": "https://cy.ncss.cn/",
    "desc": "中国国际大学生创新大赛等国家级赛事官方站点"
+  },
+  {
+   "name": "大连大学 · 创新创业学院",
+   "url": "https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm",
+   "desc": "大连大学竞赛通知与校内选拔赛公告"
   },
   {
    "name": "辽宁省教育厅 · 门户首页",

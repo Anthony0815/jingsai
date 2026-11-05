@@ -43,7 +43,8 @@
     "公示公告": "gsgg",
     "赛事动态": "race",
     "高校竞赛通知": "cxcy",
-    "省双创竞赛": "upln"
+    "省双创竞赛": "upln",
+    "大连大学竞赛通知": "dlu"
   };
 
   /* ------------------------------------------------ 浏览器端实时抓取配置 */
@@ -59,7 +60,9 @@
       url: "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/index.shtml", filter: "race" },
     { key: "lnut", name: "辽宁工业大学 · 竞赛通知", category: "高校竞赛通知",
       url: "https://cxcy.lnut.edu.cn/scjs/jstz.htm", parser: "li", forceCxcy: true,
-      pages: ["https://cxcy.lnut.edu.cn/scjs/jstz/27.htm"] }
+      pages: ["https://cxcy.lnut.edu.cn/scjs/jstz/27.htm"] },
+    { key: "dlu", name: "大连大学 · 创新创业竞赛", category: "大连大学竞赛通知",
+      url: "https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm", parser: "tr", forceCxcy: true }
   ];
 
   var KW_CXCY = ["创新创业", "双创", "互联网+", "挑战杯", "大学生创业", "创新项目",
@@ -101,6 +104,7 @@
     if (tab === "gsgg" && item.sourceKey !== "gsgg") return false;
     if (tab === "lnut" && item.sourceKey !== "lnut") return false;
     if (tab === "upln" && item.sourceKey !== "upln") return false;
+    if (tab === "dlu" && item.sourceKey !== "dlu") return false;
     if (!kw) return true;
     var hay = (item.title || "") + " " + (item.source || "") + " " + (item.tags || []).join(" ");
     return hay.toLowerCase().indexOf(kw.toLowerCase()) !== -1;
@@ -157,7 +161,8 @@
     } else {
       el.newCount.textContent = "";
     }
-    var nums = { all: items.length, cxcy: c.cxcy || 0, tournament: c.tournament || 0, upln: c.upln || 0 };
+    var nums = { all: items.length, cxcy: c.cxcy || 0, tournament: c.tournament || 0,
+      upln: c.upln || 0, dlu: c.dlu || 0 };
     Object.keys(nums).forEach(function (k) {
       var node = el.tabs.querySelector('[data-num="' + k + '"]');
       if (node) node.textContent = nums[k];
@@ -360,6 +365,15 @@
         if (!/info\/\d+\/\d+\.s?html?$/.test(href)) return;
         var title = (a.getAttribute("title") || a.textContent || "").replace(/\s+/g, " ").trim();
         push(href, title, liveDate(li.textContent) || liveDate(href));
+      });
+    } else if (src.parser === "tr") {
+      Array.prototype.forEach.call(doc.querySelectorAll("tr"), function (tr) {
+        var a = tr.querySelector("a[href]");
+        if (!a) return;
+        var href = a.getAttribute("href") || "";
+        if (!/info\/\d+\/\d+\.s?html?$/.test(href)) return;
+        var title = (a.getAttribute("title") || a.textContent || "").replace(/\s+/g, " ").trim();
+        push(href, title, liveDate(tr.textContent) || liveDate(href));
       });
     } else {
       Array.prototype.forEach.call(doc.querySelectorAll("a[href]"), function (a) {

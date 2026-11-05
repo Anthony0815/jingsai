@@ -39,6 +39,9 @@ SOURCES = [
     {"key": "upln", "name": "辽宁省双创平台 · 竞赛大厅", "category": "省双创竞赛",
      "filter": "all", "api": True,
      "url": "https://cxcy.upln.cn/provincial/match/competition/queryShow?pageNo=1&pageSize=100"},
+    {"key": "dlu", "name": "大连大学 · 创新创业竞赛", "category": "大连大学竞赛通知",
+     "url": "https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm", "filter": "all",
+     "parser": "tr", "forceCxcy": True},
 ]
 
 KEYWORDS_CXCY = [
@@ -61,6 +64,9 @@ OFFICIAL_LINKS = [
      "desc": "获奖名单、评审结果公示"},
     {"name": "全国大学生创业服务网", "url": "https://cy.ncss.cn/",
      "desc": "中国国际大学生创新大赛等国家级赛事官方站点"},
+    {"name": "大连大学 · 创新创业学院", "url": "https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm",
+     "desc": "大连大学竞赛通知与校内选拔赛公告"},
+
     {"name": "辽宁省教育厅 · 门户首页", "url": "https://jyt.ln.gov.cn/",
      "desc": "省教育厅官方门户"},
 ]
@@ -196,6 +202,48 @@ def parse_list_li(text: str, source: dict):
     return items
 
 
+def parse_list_tr(text: str, source: dict):
+    """解析「表格行」结构的高校列表页（如大连大学创新创业学院）。
+
+    每行形如：
+      <tr height="26">
+        <td><a href="../info/1101/3826.htm" title="标题">…</a></td>
+        <td><span class="timestyle…">2026-10-27&nbsp;</span></td>
+      </tr>
+    """
+    items = []
+    for block in re.findall(r"<tr\b[^>]*>(.*?)</tr>", text, re.S | re.I):
+        am = re.search(r'<a\b([^>]*)>(.*?)</a>', block, re.S | re.I)
+        if not am:
+            continue
+        attrs, inner = am.group(1), am.group(2)
+        hm = re.search(r'href\s*=\s*["\']?([^"\'\s>]+)', attrs, re.I)
+        if not hm:
+            continue
+        href = hm.group(1)
+        if not re.search(r"info/\d+/\d+\.s?html?$", href):
+            continue
+        tm = re.search(r'title\s*=\s*["\']([^"\']+)', attrs, re.I)
+        title = clean(tm.group(1) if tm else inner)
+        if len(title) < 6 or any(h in title for h in SKIP_TITLE_HINTS):
+            continue
+        dm = re.search(r"([0-9]{4}[-/][0-9]{1,2}[-/][0-9]{1,2})", block)
+        date = parse_date(dm.group(1) if dm else "", block)
+        if not date:
+            continue
+        url = urllib.parse.urljoin(source["url"], href)
+        cxcy_hits, tags = tags_for(title)
+        items.append({
+            "id": url, "title": title, "url": url, "date": date,
+            "sourceKey": source["key"], "source": source["name"],
+            "category": source["category"],
+            "cxcy": bool(cxcy_hits or source.get("forceCxcy")),
+            "tournament": bool(cxcy_hits or tags),
+            "tags": tags,
+        })
+    return items
+
+
 def fetch_json(url: str, timeout: int = 30, retries: int = 2):
     """请求平台的 JSON 接口（需带 Referer/Origin，否则会被网关拦下）。"""
     req = urllib.request.Request(url, headers={
@@ -278,8 +326,9 @@ def main() -> int:
             previous = {}
 
     merged, sources_status = [], []
+    parser_map = {"li": parse_list_li, "tr": parse_list_tr}
     for source in SOURCES:
-        parser = parse_list_li if source.get("parser") == "li" else parse_list
+        parser = parser_map.get(source.get("parser"), parse_list)
         pages = [source["url"]] + list(source.get("pages", []))
         got, errors = [], []
         for page_url in pages:
@@ -338,6 +387,7 @@ def main() -> int:
             "cxcy": sum(1 for x in deduped if x.get("cxcy")),
             "tournament": sum(1 for x in deduped if x.get("tournament")),
             "upln": sum(1 for x in deduped if x.get("sourceKey") == "upln"),
+            "dlu": sum(1 for x in deduped if x.get("sourceKey") == "dlu"),
             "new": sum(1 for x in deduped if x.get("isNew")),
         },
         "sources": sources_status,

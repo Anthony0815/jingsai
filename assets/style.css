@@ -252,6 +252,7 @@ a { color: inherit; text-decoration: none; }
 .badge.cxcy { background: var(--blue-soft); color: var(--blue); }
 .badge.race { background: #fff3e4; color: var(--amber); }
 .badge.upln { background: #e9f5ee; color: #1c7c45; }
+.badge.dlu { background: #efeffe; color: #4b46c4; }
 .badge.st { background: #f1f4fa; color: var(--ink-2); }
 .badge.st-live { background: #e6f6ec; color: #17794a; }
 .badge.st-soon { background: #eef2ff; color: #3b5bdb; }
