@@ -21,7 +21,7 @@
 ```
 .github/workflows/daily-sync.yml   每天 UTC 00:00（北京时间 08:00）触发
         ↓
-scraper/scrape.py                  抓取 4 个官方来源 → data/notices.json
+scraper/scrape.py                  抓取 5 个官方来源 → data/notices.json
         ↓
 tools/build_page.py                模板 + 数据 + 样式脚本 → 单文件 index.html
         ↓
@@ -32,15 +32,23 @@ commit & push                      GitHub Pages 自动重新发布
 
 也可以手动触发：仓库 **Actions → 每日同步官方通知 → Run workflow**。
 
+想在本地立刻同步一次（也会顺带更新省双创平台数据并发布），**双击 `立即同步.bat`** 即可：
+它会跑完「抓取 → 构建 → 推送 → PocketBay 部署」，窗口里能看到每一步结果，跑完按任意键关闭。
+
+> `.ps1` 文件双击默认是用记事本打开的，所以不要双击 `每日同步并推送.ps1`；
+> 要么用 `立即同步.bat`，要么右键该 `.ps1` → 使用 PowerShell 运行。
+
 ## 目录结构
 
 ```
 index.html                  构建产物，GitHub Pages 直接托管的单文件页面
 assets/app.js               前端逻辑（渲染、筛选、搜索、原文抽屉）
 assets/style.css            页面样式
-tools/page_template.html    页面模板
+tools/page_template.tpl     页面模板（构建用，勿直接部署）
 tools/build_page.py         构建脚本
 scraper/scrape.py           抓取脚本（仅用标准库）
+立即同步.bat                一键同步：抓取 + 构建 + 推送 + 部署
+每日同步并推送.ps1          被计划任务调用的同步脚本
 data/notices.json           抓取结果快照
 .github/workflows/          GitHub Actions 定时任务
 ```
@@ -58,9 +66,10 @@ python -m http.server 8000   # 打开 http://127.0.0.1:8000/
 - 辽宁省教育厅 · 最新通知 https://jyt.ln.gov.cn/jyt/gk/zxtz/index.shtml
 - 辽宁省教育厅 · 公示公告 https://jyt.ln.gov.cn/jyt/gk/gsgg/index.shtml
 - 辽宁省教育厅 · 教育要闻 https://jyt.ln.gov.cn/jyt/jyzx/jyyw/index.shtml
+- 辽宁省双创平台 · 竞赛大厅 https://cxcy.upln.cn/match（接口 /provincial/match/competition/queryShow）
 - 辽宁工业大学 · 竞赛通知 https://cxcy.lnut.edu.cn/scjs/jstz.htm
 
-「辽宁省大学生创新创业管理共享平台」（https://cxcy.upln.cn/）为登录后前端渲染的单页应用，接口未公开，因此本站只提供入口链接与连通性检测，不抓取其数据。
+「辽宁省大学生创新创业管理共享平台」的竞赛大厅接口 /provincial/match/competition/queryShow 对浏览器跨域请求返回 403（无 CORS 头），且 GitHub 的境外运行环境无法解析该域名，因此这 4 条竞赛只在**本机运行同步脚本时**抓取并随发布更新；页面上的「立即更新」按钮无法刷新这部分，会显示「沿用缓存」。其余 4 个来源在任何机器上都能抓取。
 
 ## 免责声明
 

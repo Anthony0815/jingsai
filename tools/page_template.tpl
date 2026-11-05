@@ -115,5 +115,8 @@
 </section>
 
 <script src="app.js"></script>
+<!-- Cloudflare Web Analytics -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "60c4770755e144ec9b2f520e89c4b863"}'></script>
+<!-- End Cloudflare Web Analytics -->
 </body>
 </html>
