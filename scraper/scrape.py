@@ -390,7 +390,8 @@ def main() -> int:
                 else:
                     got.extend(parser(fetch(page_url), source))
             except Exception as exc:  # 单页失败不影响其它页
-                errors.append("%s: %s" % (page_url, exc.__class__.__name__))
+                reason = str(exc).strip()
+                errors.append(exc.__class__.__name__ + (": " + reason[:60] if reason else ""))
         if got:
             merged.extend(got)
             sources_status.append({"key": source["key"], "name": source["name"],
@@ -398,13 +399,18 @@ def main() -> int:
         else:
             cached = [dict(item, stale=True) for item in previous.values()
                       if item.get("sourceKey") == source["key"]]
-            merged.extend(cached)
-            sources_status.append({
+            status = {
                 "key": source["key"], "name": source["name"],
                 "status": "stale" if cached else "fail",
                 "count": len(cached),
-                "error": "; ".join(errors)[:200] or "no items",
-            })
+            }
+            if cached:
+                # 有缓存就沿用，不把技术错误写进数据源面板（页面只显示「沿用缓存」）
+                status["note"] = "沿用上次缓存（%s）" % ("; ".join(errors)[:80] or "本次未取到")
+            else:
+                status["error"] = "; ".join(errors)[:160] or "no items"
+            merged.extend(cached)
+            sources_status.append(status)
 
     seen, deduped = set(), []
     for item in merged:
@@ -452,8 +458,12 @@ def main() -> int:
 
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     DATA_FILE.write_text(json.dumps(snapshot, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(json.dumps({"generatedAt": snapshot["generatedAt"], "counts": snapshot["counts"],
-                      "sources": sources_status}, ensure_ascii=False))
+    c = snapshot["counts"]
+    parts = ["%s %s/%s" % (s["key"], s.get("status"), s.get("count"))
+             for s in sources_status]
+    print("抓取完成 %s | 共 %d 条（创新创业 %d / 大赛 %d）| %s" % (
+        snapshot["generatedAt"], c.get("total", 0), c.get("cxcy", 0),
+        c.get("tournament", 0), " · ".join(parts)))
     return 0
 
 
