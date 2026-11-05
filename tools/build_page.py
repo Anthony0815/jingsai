@@ -18,12 +18,10 @@ JS = ROOT / "assets" / "app.js"
 DATA = ROOT / "data" / "notices.json"
 OUT = ROOT / "index.html"
 
-STATIC_BADGE = '<span class="btn ghost static-badge" title="由 GitHub Actions 每日 08:00 自动抓取">每日 08:00 自动更新</span>'
-
 SYNC_NOTE = """<div class="card hint">
         <h2>同步说明</h2>
-        <p>本页由 <b>GitHub Actions</b> 每天 <b>北京时间 08:00</b> 自动抓取官方公开页面并重新发布，无需人工干预。</p>
-        <p>若某次抓取失败，该来源会继续显示上一次的缓存内容（标记「沿用缓存」），不会出现编造条目。</p>
+        <p>云端由 <b>GitHub Actions</b> 每天 <b>北京时间 08:00</b> 自动抓取官方公开页面并重新发布；点右上角「<b>立即更新</b>」可当场重新抓取，无需等待下一次定时任务。</p>
+        <p>「立即更新」在浏览器里直接读取官方页面，省双创平台接口禁止跨域，该来源沿用上次发布时抓到的结果（标记「沿用缓存」）。</p>
       </div>"""
 
 
@@ -41,9 +39,10 @@ def main() -> int:
         '<script src="app.js"></script>',
         "<script>window.__EMBEDDED_DATA__ = %s;</script>\n<script>\n%s\n</script>" % (payload, js))
 
-    # 静态托管没有后端：把「立即同步」按钮换成自动更新标识
+    # 静态托管没有后端，但「立即更新」改为浏览器端实时抓取，按钮保留
     html = re.sub(r'<button class="btn primary" id="refreshBtn"[^>]*>.*?</button>',
-                  STATIC_BADGE, html, flags=re.S)
+                  '<button class="btn primary" id="refreshBtn" type="button" '
+                  'title="立即抓取官方页面并刷新本页">立即更新</button>', html, flags=re.S)
 
     # 同步说明改成 GitHub Actions 版本
     html = re.sub(r'<div class="card hint">.*?</div>\s*</aside>',

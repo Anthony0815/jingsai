@@ -17,10 +17,11 @@
       </div>
     </div>
     <div class="topbar-actions">
+      <span class="refresh-hint" id="refreshHint" aria-live="polite"></span>
       <a class="btn ghost" id="platformLink" href="https://cxcy.upln.cn/" target="_blank" rel="noopener noreferrer">
         辽宁省双创平台 ↗
       </a>
-      <button class="btn primary" id="refreshBtn" type="button">立即同步</button>
+      <button class="btn primary" id="refreshBtn" type="button" title="立即抓取官方页面并刷新本页">立即更新</button>
     </div>
   </div>
 </header>
@@ -85,8 +86,8 @@
       </div>
       <div class="card hint">
         <h2>同步说明</h2>
-        <p>页面服务运行期间，每天 <b id="syncHour">08:00</b> 自动抓取一次；也可点击「立即同步」手动刷新。</p>
-        <p>电脑关机期间不会抓取，开机启动服务后会自动补齐当天数据。</p>
+        <p>云端每天 <b id="syncHour">08:00</b> 自动抓取一次官方页面；点右上角「<b>立即更新</b>」可当场重新抓取，无需等待。</p>
+        <p>抓取失败时该来源会保留上一次的内容并标记「沿用缓存」，不会出现编造条目。</p>
       </div>
     </aside>
   </div>

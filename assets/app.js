@@ -7,7 +7,8 @@
     data: null,
     tab: "all",
     keyword: "",
-    timer: null
+    timer: null,
+    busy: false
   };
 
   var el = {
@@ -16,6 +17,7 @@
     tabs: document.getElementById("tabs"),
     search: document.getElementById("searchInput"),
     refresh: document.getElementById("refreshBtn"),
+    hint: document.getElementById("refreshHint"),
     lastSync: document.getElementById("lastSync"),
     nextSync: document.getElementById("nextSync"),
     countdown: document.getElementById("countdown"),
@@ -43,6 +45,29 @@
     "高校竞赛通知": "cxcy",
     "省双创竞赛": "upln"
   };
+
+  /* ------------------------------------------------ 浏览器端实时抓取配置 */
+  // 公开 CORS 代理：官方站点不允许跨域读取，经由代理取回原始 HTML
+  var PROXY = "https://api.allorigins.win/raw?url=";
+
+  var LIVE_SOURCES = [
+    { key: "zxtz", name: "辽宁省教育厅 · 最新通知", category: "通知公告",
+      url: "https://jyt.ln.gov.cn/jyt/gk/zxtz/index.shtml" },
+    { key: "gsgg", name: "辽宁省教育厅 · 公示公告", category: "公示公告",
+      url: "https://jyt.ln.gov.cn/jyt/gk/gsgg/index.shtml" },
+    { key: "jyyw", name: "辽宁省教育厅 · 教育要闻", category: "赛事动态",
+      url: "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/index.shtml", filter: "race" },
+    { key: "lnut", name: "辽宁工业大学 · 竞赛通知", category: "高校竞赛通知",
+      url: "https://cxcy.lnut.edu.cn/scjs/jstz.htm", parser: "li", forceCxcy: true,
+      pages: ["https://cxcy.lnut.edu.cn/scjs/jstz/27.htm"] }
+  ];
+
+  var KW_CXCY = ["创新创业", "双创", "互联网+", "挑战杯", "大学生创业", "创新项目",
+    "创业项目", "创新大赛", "创业大赛", "训练计划", "创客", "创业孵化",
+    "创新方法", "科技成果转化"];
+  var KW_RACE = ["大赛", "竞赛", "赛事", "选拔赛", "赛区", "决赛", "初赛", "复赛",
+    "路演", "获奖名单", "评审", "参赛", "赛", "评奖", "颁奖"];
+  var SKIP_HINTS = ["无障碍", "网站地图", "返回", "更多", "登录", "注册", "首页"];
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -223,7 +248,6 @@
     if (EMBED) {
       document.body.setAttribute("data-mode", "static");
       applyData(EMBED);
-      if (el.refresh) el.refresh.hidden = true;
       return;
     }
     el.list.innerHTML = '<li class="skeleton"></li><li class="skeleton"></li><li class="skeleton"></li>';
@@ -237,24 +261,270 @@
       });
   }
 
-  function doRefresh() {
-    if (EMBED || !el.refresh) return;
-    el.refresh.disabled = true;
-    el.refresh.textContent = "同步中…";
-    fetch("/api/refresh", { cache: "no-store" })
-      .then(function (r) { return r.json(); })
-      .then(function (res) {
-        if (res.ok) applyData(res.data);
-      })
-      .catch(function () {})
-      .then(function () {
-        el.refresh.disabled = false;
-        el.refresh.textContent = "立即同步";
-        clearTimeout(state.timer);
+  /* ------------------------------------------------ 浏览器端实时抓取实现 */
+  function pad2(n) { return n < 10 ? "0" + n : "" + n; }
+
+  function nowStr() {
+    var d = new Date();
+    return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) + " " +
+      pad2(d.getHours()) + ":" + pad2(d.getMinutes()) + ":" + pad2(d.getSeconds());
+  }
+
+  function nextSyncStr() {
+    var d = new Date();
+    var t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8, 0, 0, 0);
+    if (d.getTime() >= t.getTime()) t = new Date(t.getTime() + 86400000);
+    return t.getFullYear() + "-" + pad2(t.getMonth() + 1) + "-" + pad2(t.getDate()) + " " +
+      pad2(t.getHours()) + ":" + pad2(t.getMinutes()) + ":" + pad2(t.getSeconds());
+  }
+
+  function setHint(text) {
+    if (el.hint) el.hint.textContent = text || "";
+  }
+
+  // 通过公开代理取回官方页面（失败自动重试，最多 tries 次）
+  function viaProxy(url, tries) {
+    var left = tries || 2;
+    function attempt() {
+      left -= 1;
+      return fetch(PROXY + encodeURIComponent(url), { cache: "no-store" })
+        .then(function (r) {
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          return r.text();
+        })
+        .then(function (t) {
+          if (!t || t.length < 500) throw new Error("空响应");
+          return t;
+        })
+        .catch(function (err) {
+          if (left > 0) {
+            return new Promise(function (res) { setTimeout(res, 700); }).then(attempt);
+          }
+          throw err;
+        });
+    }
+    return attempt();
+  }
+
+  function liveDate(text) {
+    var m = /(20\d{2})[-\/年]?(\d{2})[-\/月]?(\d{2})/.exec(text || "");
+    if (!m) return "";
+    var mo = +m[2], day = +m[3];
+    if (mo < 1 || mo > 12 || day < 1 || day > 31) return "";
+    return m[1] + "-" + m[2] + "-" + m[3];
+  }
+
+  function liveAccept(title) {
+    if (!title || title.length < 6) return false;
+    return !SKIP_HINTS.some(function (h) { return title.indexOf(h) !== -1; });
+  }
+
+  function liveTags(title) {
+    var cxcy = KW_CXCY.filter(function (k) { return title.indexOf(k) !== -1; });
+    var race = KW_RACE.filter(function (k) { return title.indexOf(k) !== -1; });
+    var tags = cxcy.slice(0, 2).concat(race.slice(0, 2)).filter(function (v, i, arr) {
+      return arr.indexOf(v) === i;
+    });
+    return { cxcy: cxcy, tags: tags };
+  }
+
+  function mkItem(src, href, title, date) {
+    var tg = liveTags(title);
+    return {
+      id: href, title: title, url: href, date: date,
+      sourceKey: src.key, source: src.name, category: src.category,
+      cxcy: !!(tg.cxcy.length || src.forceCxcy),
+      tournament: !!(tg.cxcy.length || tg.tags.length),
+      tags: tg.tags
+    };
+  }
+
+  function scrapeList(html, src) {
+    var doc = new DOMParser().parseFromString(html, "text/html");
+    var out = [];
+
+    function push(href, title, date) {
+      if (!liveAccept(title) || !date) return;
+      var abs = href;
+      try { abs = new URL(href, src.url).href; } catch (e) { return; }
+      var tg = liveTags(title);
+      if (src.filter === "race" && !tg.cxcy.length && !tg.tags.length) return;
+      out.push(mkItem(src, abs, title, date));
+    }
+
+    if (src.parser === "li") {
+      Array.prototype.forEach.call(doc.querySelectorAll("li"), function (li) {
+        var a = li.querySelector("a[href]");
+        if (!a) return;
+        var href = a.getAttribute("href") || "";
+        if (!/info\/\d+\/\d+\.s?html?$/.test(href)) return;
+        var title = (a.getAttribute("title") || a.textContent || "").replace(/\s+/g, " ").trim();
+        push(href, title, liveDate(li.textContent) || liveDate(href));
       });
+    } else {
+      Array.prototype.forEach.call(doc.querySelectorAll("a[href]"), function (a) {
+        var href = a.getAttribute("href") || "";
+        if (!/\/\d{6,}\/?(?:index\.s?html?)?$/.test(href)) return;
+        var title = (a.getAttribute("title") || a.textContent || "").replace(/\s+/g, " ").trim();
+        var near = a.parentElement ? a.parentElement.textContent : "";
+        push(href, title, liveDate(href) || liveDate(near));
+      });
+    }
+    return out;
+  }
+
+  function scrapeSource(src) {
+    var pages = [src.url].concat(src.pages || []);
+    return Promise.all(pages.map(function (p) {
+      return viaProxy(p).then(function (html) { return scrapeList(html, src); })
+        .catch(function () { return []; });
+    })).then(function (chunks) {
+      var items = chunks.reduce(function (a, b) { return a.concat(b); }, []);
+      if (!items.length) throw new Error("no items");
+      return items;
+    });
+  }
+
+  function liveUpdate() {
+    if (state.busy) return;
+    state.busy = true;
+    var label = el.refresh ? el.refresh.textContent : "";
+    if (el.refresh) { el.refresh.disabled = true; el.refresh.textContent = "更新中…"; }
+    setHint("正在抓取官方页面…");
+
+    function finish(msg) {
+      state.busy = false;
+      if (el.refresh) { el.refresh.disabled = false; el.refresh.textContent = label || "立即更新"; }
+      setHint(msg);
+    }
+
+    var jobs = LIVE_SOURCES.map(function (src) {
+      return scrapeSource(src).then(function (items) {
+        return { src: src, items: items };
+      }).catch(function () {
+        return { src: src, items: null };
+      });
+    });
+
+    Promise.all(jobs).then(function (results) {
+      var prev = (state.data && state.data.items) || [];
+      var seenUrl = {};
+      prev.forEach(function (it) { seenUrl[it.url] = it; });
+
+      var merged = [], stats = [], liveOk = 0;
+      results.forEach(function (r) {
+        if (r.items && r.items.length) {
+          liveOk += 1;
+          merged = merged.concat(r.items);
+          stats.push({ key: r.src.key, name: r.src.name, status: "ok", count: r.items.length });
+        } else {
+          var cached = prev.filter(function (it) { return it.sourceKey === r.src.key; })
+            .map(function (it) { return Object.assign({}, it, { stale: true }); });
+          merged = merged.concat(cached);
+          stats.push({
+            key: r.src.key, name: r.src.name,
+            status: cached.length ? "stale" : "fail", count: cached.length,
+            error: "浏览器实时抓取失败"
+          });
+        }
+      });
+
+      // 省平台接口禁止跨域，沿用云端发布时抓到的竞赛条目
+      var upln = prev.filter(function (it) { return it.sourceKey === "upln"; })
+        .map(function (it) { return Object.assign({}, it, { stale: true }); });
+      if (upln.length) {
+        merged = merged.concat(upln);
+        stats.push({
+          key: "upln", name: "辽宁省双创平台 · 竞赛大厅",
+          status: "stale", count: upln.length, error: "接口禁止跨域，显示上次云端结果"
+        });
+      }
+
+      var seen = {}, items = [];
+      merged.forEach(function (it) {
+        if (seen[it.url]) return;
+        seen[it.url] = 1;
+        items.push(it);
+      });
+      items.sort(function (a, b) {
+        return String(b.date || "").localeCompare(String(a.date || "")) ||
+          String(b.title || "").localeCompare(String(a.title || ""));
+      });
+      items.forEach(function (it) { it.isNew = !seenUrl[it.url]; });
+
+      var counts = {
+        total: items.length,
+        cxcy: items.filter(function (x) { return x.cxcy; }).length,
+        tournament: items.filter(function (x) { return x.tournament; }).length,
+        upln: items.filter(function (x) { return x.sourceKey === "upln"; }).length,
+        new: items.filter(function (x) { return x.isNew; }).length
+      };
+
+      var snap = Object.assign({}, state.data || {}, {
+        generatedAt: nowStr(),
+        nextSync: nextSyncStr(),
+        items: items,
+        counts: counts,
+        sources: stats,
+        platform: { ok: false, status: "unknown", name: "辽宁省大学生创新创业管理共享平台", url: "https://cxcy.upln.cn/" },
+        liveUpdated: true
+      });
+      applyData(snap);
+
+      if (liveOk === LIVE_SOURCES.length) {
+        finish("已更新 · 实时抓取 " + items.length + " 条");
+      } else if (liveOk > 0) {
+        finish("已更新 · " + liveOk + "/" + LIVE_SOURCES.length + " 个来源实时抓取成功");
+      } else {
+        finish("实时抓取失败，已保留上一次结果");
+      }
+    }).catch(function () {
+      finish("更新失败：网络异常，请稍后重试");
+    });
+  }
+
+  function doRefresh() {
+    if (!el.refresh) return;
+    if (!EMBED) {
+      // 本地服务模式：直接调用后端刷新（会真正抓取并落盘）
+      el.refresh.disabled = true;
+      el.refresh.textContent = "更新中…";
+      setHint("");
+      return fetch("/api/refresh", { cache: "no-store" })
+        .then(function (r) { return r.json(); })
+        .then(function (res) { if (res.ok) applyData(res.data); })
+        .catch(function () {})
+        .then(function () {
+          el.refresh.disabled = false;
+          el.refresh.textContent = "立即更新";
+        });
+    }
+    liveUpdate();
   }
 
   /* ------------------------------------------------------------ drawer */
+  var NOISE = /^(字号|打印|关闭|分享|扫一扫|字体|【|打印本页|返回顶部)[:：]?/;
+
+  function drawerFromProxy(item) {
+    viaProxy(item.url, 2).then(function (html) {
+      var doc = new DOMParser().parseFromString(html, "text/html");
+      Array.prototype.forEach.call(doc.querySelectorAll("script,style,nav,header,footer"), function (n) {
+        n.parentNode && n.parentNode.removeChild(n);
+      });
+      var texts = Array.prototype.map.call(doc.querySelectorAll("p"), function (p) {
+        return (p.textContent || "").replace(/\s+/g, " ").trim();
+      }).filter(function (t) {
+        return t.length > 10 && !NOISE.test(t);
+      });
+      if (!texts.length) throw new Error("empty");
+      el.drawerBody.innerHTML = texts.slice(0, 80).map(function (t) {
+        return "<p>" + esc(t) + "</p>";
+      }).join("");
+    }).catch(function () {
+      el.drawerBody.innerHTML = '<p>正文预览暂时读不到（代理通道繁忙），请点击下方「打开官方原文 ↗」查看官方全文。</p>';
+    });
+  }
+
   function openDrawer(item) {
     var title = item.title;
     el.drawerTitle.textContent = title;
@@ -266,7 +536,7 @@
     document.body.style.overflow = "hidden";
 
     if (EMBED) {
-      el.drawerBody.innerHTML = "<p>这份文件是离线快照，未内置正文。</p><p>点击下方「打开官方原文 ↗」可查看官方全文，标题、日期与链接均为官方原始内容。</p>";
+      drawerFromProxy(item);
       return;
     }
 
@@ -345,4 +615,9 @@
   }, 60000);
 
   load();
+
+  // 支持 ?refresh=1 打开即抓取最新（便于分享「打开就是最新」的链接）
+  if (/[?&]refresh=1\b/.test(location.search) && el.refresh) {
+    setTimeout(doRefresh, 400);
+  }
 })();
