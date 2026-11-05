@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 $root = Split-Path $PSScriptRoot -Parent
 $repo = "Anthony0815/jingsai"
 
@@ -21,7 +21,8 @@ function PostJson($url, $obj) {
 
 $files = Get-ChildItem $root -Recurse -File -Force | Where-Object {
   $rel = $_.FullName.Substring($root.Length + 1) -replace "\\", "/"
-  $rel -notmatch "^\.git/" -and $rel -notmatch "^shots/" -and $rel -notmatch "__pycache__" -and $rel -notmatch "^logs/"
+  $rel -notmatch "^\.git/" -and $rel -notmatch "^shots/" -and $rel -notmatch "__pycache__" -and $rel -notmatch "^logs/" -and
+    $rel -notmatch "^aliyun-fc/.*\.zip$" -and $rel -notmatch "\.zip$"
 }
 
 $ref = Invoke-RestMethod "$api/git/ref/heads/main" -Headers $headers
