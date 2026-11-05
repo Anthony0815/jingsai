@@ -180,6 +180,7 @@ def enrich_deadlines(items, source_key="dlu", max_items=40, workers=6):
 
 
 BODY_LIMIT = 2400
+BODY_DAYS = 60   # 只给最近 60 天内的通知存正文
 BODY_NOISE = re.compile(
     r"^(字号|打印|关闭|分享|扫一扫|【?字体|上一篇|下一篇|相关附件|附件下载|返回顶部|"
     r"浏览次数|点击次数|首页|当前位置|您所在的位置)")
@@ -230,17 +231,24 @@ def extract_body(html_text: str) -> str:
     return "\n".join(lines)[:BODY_LIMIT]
 
 
-def enrich_bodies(items, previous_map, max_items=45, workers=8):
-    """补正文：先继承上一次快照里的正文，再给缺正文的条目并发抓详情页。"""
+def enrich_bodies(items, previous_map, max_items=45, workers=8, days=BODY_DAYS):
+    """补正文（只保留最近 days 天内的通知）：先继承上次快照，再并发抓详情页。"""
     from concurrent.futures import ThreadPoolExecutor
 
+    cutoff = (dt.datetime.now(TZ).date() - dt.timedelta(days=days)).isoformat()
+    fresh = []
     for it in items:
+        if (it.get("date") or "") < cutoff:   # 太旧的通知不存正文，避免页面越滚越大
+            it.pop("body", None)
+            it.pop("bodyFrom", None)
+            continue
         prev = previous_map.get(it.get("url")) or {}
         if prev.get("body"):
             it["body"] = prev["body"]
             it["bodyFrom"] = "cache"
+        fresh.append(it)
 
-    pending = [it for it in items if not it.get("body")]
+    pending = [it for it in fresh if not it.get("body")]
     pending.sort(key=lambda x: (bool(x.get("isNew")), x.get("date") or ""), reverse=True)
     targets = pending[:max_items]
     if not targets:
