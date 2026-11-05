@@ -339,9 +339,10 @@
   }
 
   function nextSyncStr() {
-    // 云端每小时检查一次：下一次整点
+    // 每天北京时间 08:00 同步一次
     var d = new Date();
-    var t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() + 1, 0, 0, 0);
+    var t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8, 0, 0, 0);
+    if (t.getTime() <= d.getTime()) t = new Date(t.getTime() + 86400000);
     return t.getFullYear() + "-" + pad2(t.getMonth() + 1) + "-" + pad2(t.getDate()) + " " +
       pad2(t.getHours()) + ":" + pad2(t.getMinutes()) + ":" + pad2(t.getSeconds());
   }

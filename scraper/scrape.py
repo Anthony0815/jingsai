@@ -450,10 +450,11 @@ def parse_upln(data, source: dict):
 
 
 def next_sync_time(now: dt.datetime) -> str:
-    """下一次整点（云端每小时跑一次）。"""
+    """下一次同步：每天北京时间 08:00。"""
     local = now.astimezone(TZ)
-    target = (local.replace(minute=0, second=0, microsecond=0)
-              + dt.timedelta(hours=1))
+    target = local.replace(hour=SYNC_HOUR, minute=0, second=0, microsecond=0)
+    if target <= local:
+        target += dt.timedelta(days=1)
     return target.strftime("%Y-%m-%d %H:%M:%S")
 
 
