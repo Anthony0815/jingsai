@@ -50,8 +50,14 @@
   };
 
   /* ------------------------------------------------ 浏览器端实时抓取配置 */
-  // 公开 CORS 代理：官方站点不允许跨域读取，经由代理取回原始 HTML
-  var PROXY = "https://api.allorigins.win/raw?url=";
+  // 公开 CORS 代理：官方站点不允许跨域读取，经由代理取回原始 HTML。
+  // 这些免费代理偶尔会限流/宕机，所以准备多个，按顺序自动切换。
+  var PROXIES = [
+    function (u) { return "https://api.cors.lol/?url=" + encodeURIComponent(u); },
+    function (u) { return "https://api.allorigins.win/raw?url=" + encodeURIComponent(u); },
+    function (u) { return "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(u); }
+  ];
+  var PROXY_GOOD = 0;   // 记住上一次成功的代理，下次优先用
 
   var LIVE_SOURCES = [
     { key: "zxtz", name: "辽宁省教育厅 · 最新通知", category: "通知公告",
@@ -344,28 +350,44 @@
     if (el.hint) el.hint.textContent = text || "";
   }
 
-  // 通过公开代理取回官方页面（失败自动重试，最多 tries 次）
+  // 通过公开代理取回官方页面：按顺序试多个代理，全部失败再整体重试，最多 rounds 轮
   function viaProxy(url, tries) {
-    var left = tries || 2;
-    function attempt() {
-      left -= 1;
-      return fetch(PROXY + encodeURIComponent(url), { cache: "no-store" })
-        .then(function (r) {
-          if (!r.ok) throw new Error("HTTP " + r.status);
-          return r.text();
-        })
-        .then(function (t) {
-          if (!t || t.length < 500) throw new Error("空响应");
-          return t;
-        })
-        .catch(function (err) {
-          if (left > 0) {
-            return new Promise(function (res) { setTimeout(res, 700); }).then(attempt);
-          }
-          throw err;
-        });
+    var rounds = Math.max(1, tries || 1);
+
+    function oneRound() {
+      var order = [];
+      for (var i = 0; i < PROXIES.length; i++) {
+        order.push((PROXY_GOOD + i) % PROXIES.length);
+      }
+      function step(k) {
+        if (k >= order.length) {
+          return Promise.reject(new Error("所有代理均不可用"));
+        }
+        var idx = order[k];
+        return fetch(PROXIES[idx](url), { cache: "no-store" })
+          .then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.text();
+          })
+          .then(function (t) {
+            if (!t || t.length < 500) throw new Error("空响应");
+            PROXY_GOOD = idx;
+            return t;
+          })
+          .catch(function (err) {
+            return step(k + 1).catch(function () { throw err; });
+          });
+      }
+      return step(0);
     }
-    return attempt();
+
+    var p = oneRound();
+    for (var r = 1; r < rounds; r++) {
+      p = p.catch(function () {
+        return new Promise(function (res) { setTimeout(res, 900); }).then(oneRound);
+      });
+    }
+    return p;
   }
 
   function liveDate(text) {
@@ -547,10 +569,10 @@
       } else if (liveOk > 0) {
         finish("已更新 · " + liveOk + "/" + LIVE_SOURCES.length + " 个来源实时抓取成功");
       } else {
-        finish("实时抓取失败，已保留上一次结果");
+        finish("实时抓取失败：公共代理暂不可用，已保留上次结果");
       }
     }).catch(function () {
-      finish("更新失败：网络异常，请稍后重试");
+      finish("更新失败：公共代理暂时不可用（官方站禁止跨域），稍后重试即可");
     });
   }
 
