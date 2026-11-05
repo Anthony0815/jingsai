@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import html as html_lib
 import json
 import os
 import re
@@ -176,6 +177,86 @@ def enrich_deadlines(items, source_key="dlu", max_items=40, workers=6):
         for item, deadline in zip(targets, pool.map(work, targets)):
             if deadline:
                 item["deadline"] = deadline
+
+
+BODY_LIMIT = 2400
+BODY_NOISE = re.compile(
+    r"^(字号|打印|关闭|分享|扫一扫|【?字体|上一篇|下一篇|相关附件|附件下载|返回顶部|"
+    r"浏览次数|点击次数|首页|当前位置|您所在的位置)")
+BODY_MARKERS = ('id="vsb_content"', "id='vsb_content'", 'class="v_news_content',
+                'class="TRS_Editor', "class='TRS_Editor", 'class="article',
+                "class='article", 'class="content', "class='content", 'class="zoom"')
+
+
+def extract_body(html_text: str) -> str:
+    """从官方详情页 HTML 里抽出正文纯文本（不是正文页 / 抓不到就返回空串）。"""
+    text = re.sub(r"(?is)<(script|style|noscript)[^>]*>.*?</\1>", " ", html_text or "")
+    start = -1
+    for marker in BODY_MARKERS:
+        pos = text.find(marker)
+        if pos >= 0 and (start < 0 or pos < start):
+            start = pos
+    chunk = text[start:start + 90000] if start >= 0 else text[:90000]
+    if start >= 0:  # 切点在标签中间，丢掉半个开标签
+        cut = chunk.find(">")
+        if 0 <= cut < 200:
+            chunk = chunk[cut + 1:]
+    chunk = re.sub(r"(?is)<br\s*/?>", "\n", chunk)
+    chunk = re.sub(r"(?is)</(p|div|li|h[1-6]|tr|section)>", "\n", chunk)
+    chunk = re.sub(r"(?s)<[^>]+>", " ", chunk)
+    chunk = html_lib.unescape(chunk)
+    lines = []
+    total = 0
+    started = False
+    for raw in chunk.split("\n"):
+        line = re.sub(r"[ \t\u3000]+", " ", raw).strip()
+        if not line or BODY_NOISE.match(line):
+            continue
+        if len(line) < 4 and not re.search(r"\d", line):
+            continue
+        if lines and lines[-1] == line:
+            continue
+        if not started:
+            # 正文开头前的导航/面包屑（短、无标点）先跳过
+            if len(line) < 14 and not re.search(r"[，。；：、！？]", line):
+                continue
+            started = True
+        lines.append(line)
+        total += len(line) + 1
+        if total >= BODY_LIMIT:
+            break
+    if total < 60:  # 太短，多半抓到的是导航而不是正文
+        return ""
+    return "\n".join(lines)[:BODY_LIMIT]
+
+
+def enrich_bodies(items, previous_map, max_items=45, workers=8):
+    """补正文：先继承上一次快照里的正文，再给缺正文的条目并发抓详情页。"""
+    from concurrent.futures import ThreadPoolExecutor
+
+    for it in items:
+        prev = previous_map.get(it.get("url")) or {}
+        if prev.get("body"):
+            it["body"] = prev["body"]
+            it["bodyFrom"] = "cache"
+
+    pending = [it for it in items if not it.get("body")]
+    pending.sort(key=lambda x: (bool(x.get("isNew")), x.get("date") or ""), reverse=True)
+    targets = pending[:max_items]
+    if not targets:
+        return
+
+    def work(item):
+        try:
+            return extract_body(fetch(item["url"], timeout=15, retries=1))
+        except Exception:
+            return ""
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for item, body in zip(targets, pool.map(work, targets)):
+            if body:
+                item["body"] = body
+                item["bodyFrom"] = "live"
 
 
 def parse_date(*chunks: str) -> str:
@@ -425,6 +506,9 @@ def main() -> int:
 
     # 补充「报名截止」：省双创平台自带；大连大学逐条读详情页（失败则留空）
     enrich_deadlines(deduped)
+
+    # 补充正文：直接抓官方详情页；抓不到就沿用上一次缓存里的正文
+    enrich_bodies(deduped, previous)
 
     platform = {"ok": False, "status": "unknown", "name": "辽宁省大学生创新创业管理共享平台",
                 "url": "https://cxcy.upln.cn/"}

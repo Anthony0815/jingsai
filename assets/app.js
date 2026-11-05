@@ -663,6 +663,12 @@
     var note = document.getElementById("drawerNote");
     if (note) note.textContent = DRAWER_NOTE;
 
+    // 抓取阶段已经把正文存进数据里：直接渲染，不再依赖浏览器跨域请求
+    if (item.body) {
+      renderBody(item, note);
+      return;
+    }
+
     if (item.sourceKey === "upln") {
       if (note) note.textContent = "该平台接口禁止跨域，站内无法预览正文，请前往官方平台查看。";
       drawerUpln(item);
@@ -697,8 +703,23 @@
       });
   }
 
-  function closeDrawer() {
-    el.drawer.hidden = true;
+  // 渲染抓取时已存下来的正文
+  function renderBody(item, note) {
+    var lines = String(item.body || "").split("\n").filter(function (s) {
+      return s.trim().length > 0;
+    });
+    var html = lines.map(function (line) {
+      return "<p>" + esc(line) + "</p>";
+    }).join("");
+    el.drawerBody.innerHTML = '<div class="article">' + html + "</div>";
+    if (note) {
+      note.textContent = (item.bodyFrom === "cache"
+        ? "正文来自上一次抓取的缓存"
+        : "正文抓取自官方页面") + "，最终以官方原文为准。";
+    }
+  }
+
+  function closeDrawer() {    el.drawer.hidden = true;
     el.mask.hidden = true;
     document.body.style.overflow = "";
     el.drawerBody.innerHTML = "";
