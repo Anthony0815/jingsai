@@ -50,6 +50,10 @@
 
   <div class="layout">
     <section class="main-col">
+      <section class="soon" id="soon" hidden aria-label="即将截止的赛事">
+        <h2>即将截止 <span class="soon-sub">7 天内报名截止</span></h2>
+        <ul class="soon-list" id="soonList"></ul>
+      </section>
       <div class="toolbar">
         <nav class="tabs" id="tabs" aria-label="频道筛选">
           <button class="tab active" data-tab="all" type="button">全部 <span class="num" data-num="all">0</span></button>

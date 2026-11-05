@@ -510,3 +510,47 @@ a { color: inherit; text-decoration: none; }
   .countdown, .newcount { display: block; margin: 4px 0 0; }
   .notice .go { display: none; }
 }
+
+/* ------------------------------------------------------------ 报名截止 */
+.badge.dd { background: #eef3fb; color: #2b5fb0; }
+.badge.dd-warn { background: #fff3e0; color: #a36100; }
+.badge.dd-hot { background: #fdecec; color: #c62828; }
+.badge.dd-end { background: #f1f2f4; color: #8b9099; }
+
+.soon {
+  background: linear-gradient(180deg, #fff7ec 0%, #fffdf9 100%);
+  border: 1px solid #f6dfc0;
+  border-radius: 14px;
+  padding: 16px 18px 13px;
+  margin-bottom: 16px;
+}
+
+.soon h2 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: #8a4b00;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.soon-sub { font-size: 12px; font-weight: 400; color: #b07a3a; }
+
+.soon-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+
+.soon-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 12px;
+  background: #fff;
+  border: 1px solid #f3e3cc;
+  border-radius: 10px;
+  cursor: pointer;
+  flex-wrap: wrap;
+}
+
+.soon-item:hover { border-color: #e9b877; }
+
+.soon-title { font-size: 13.5px; color: var(--ink); font-weight: 600; }
+.soon-meta { font-size: 12px; color: var(--ink-3); }

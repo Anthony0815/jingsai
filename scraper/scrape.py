@@ -128,6 +128,54 @@ def tags_for(title: str):
     return cxcy, tags
 
 
+DEADLINE_RES = [
+    re.compile(r"截止(?:时间|日期)?\s*[:：]?\s*(20\d{2})\s*[年\-/\.]\s*(\d{1,2})\s*[月\-/\.]\s*(\d{1,2})"),
+    re.compile(r"(?:请于|于)\s*(20\d{2})\s*[年\-/\.]\s*(\d{1,2})\s*[月\-/\.]\s*(\d{1,2})\s*(?:前|之前)"),
+    re.compile(r"(?:报名|申报|提交|报送|作品提交|材料提交)[^。；]{0,12}?截至\s*(20\d{2})\s*[年\-/\.]\s*(\d{1,2})\s*[月\-/\.]\s*(\d{1,2})"),
+]
+DEADLINE_MD = re.compile(r"截止(?:时间|日期)?\s*[:：]?\s*(\d{1,2})\s*[月\-/\.]\s*(\d{1,2})")
+
+
+def extract_deadline(html_text: str, ref_year: int) -> str:
+    """从通知正文里抽取「报名截止」日期，抽不到返回空串。"""
+    text = clean(html_text)
+    for rx in DEADLINE_RES:
+        m = rx.search(text)
+        if m:
+            y, mo, day = int(m.group(1)), int(m.group(2)), int(m.group(3))
+            if 1 <= mo <= 12 and 1 <= day <= 31:
+                return "%04d-%02d-%02d" % (y, mo, day)
+    m = DEADLINE_MD.search(text)
+    if m:
+        mo, day = int(m.group(1)), int(m.group(2))
+        if 1 <= mo <= 12 and 1 <= day <= 31:
+            return "%04d-%02d-%02d" % (ref_year, mo, day)
+    return ""
+
+
+def enrich_deadlines(items, source_key="dlu", max_items=40, workers=6):
+    """对没有截止日期的条目补抓详情页（并发，失败就跳过）。"""
+    from concurrent.futures import ThreadPoolExecutor
+
+    targets = [it for it in items
+               if it.get("sourceKey") == source_key and not it.get("deadline")][:max_items]
+    if not targets:
+        return
+
+    def work(item):
+        try:
+            page = fetch(item["url"], timeout=12, retries=1)
+        except Exception:
+            return ""
+        year = int((item.get("date") or "2026")[:4])
+        return extract_deadline(page, year)
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for item, deadline in zip(targets, pool.map(work, targets)):
+            if deadline:
+                item["deadline"] = deadline
+
+
 def parse_date(*chunks: str) -> str:
     for chunk in chunks:
         m = re.search(r"(20\d{2})[-/年]?(\d{2})[-/月]?(\d{2})", chunk or "")
@@ -303,6 +351,7 @@ def parse_upln(data, source: dict):
             "tags": [state, "省平台"],
             "signupStart": start,
             "signupEnd": end,
+            "deadline": end[:10],
             "state": state,
             "synopsis": clean(str(row.get("synopsis") or ""))[:120],
         })
@@ -365,6 +414,9 @@ def main() -> int:
     deduped.sort(key=lambda x: (x.get("date") or "", x.get("title") or ""), reverse=True)
     for item in deduped:
         item["isNew"] = item["url"] not in previous
+
+    # 补充「报名截止」：省双创平台自带；大连大学逐条读详情页（失败则留空）
+    enrich_deadlines(deduped)
 
     platform = {"ok": False, "status": "unknown", "name": "辽宁省大学生创新创业管理共享平台",
                 "url": "https://cxcy.upln.cn/"}

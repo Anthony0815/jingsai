@@ -14,6 +14,8 @@
   var el = {
     list: document.getElementById("noticeList"),
     empty: document.getElementById("emptyTip"),
+    soon: document.getElementById("soon"),
+    soonList: document.getElementById("soonList"),
     tabs: document.getElementById("tabs"),
     search: document.getElementById("searchInput"),
     refresh: document.getElementById("refreshBtn"),
@@ -93,6 +95,57 @@
     return "st-end";
   }
 
+  /* ---------------------------------------------------- 报名截止相关 */
+  function daysLeft(deadline) {
+    if (!deadline) return null;
+    var p = String(deadline).split("-");
+    if (p.length !== 3) return null;
+    var target = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    var n = new Date();
+    var today = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+    if (isNaN(target.getTime())) return null;
+    return Math.round((target - today) / 86400000);
+  }
+
+  function deadlineBadge(it) {
+    var d = daysLeft(it.deadline);
+    if (d === null) return "";
+    if (d < 0) return '<span class="badge dd dd-end">已截止</span>';
+    if (d === 0) return '<span class="badge dd dd-hot">今天截止</span>';
+    if (d <= 3) return '<span class="badge dd dd-hot">剩 ' + d + " 天</span>";
+    if (d <= 7) return '<span class="badge dd dd-warn">剩 ' + d + " 天</span>";
+    return '<span class="badge dd">' + esc(shortDay(it.deadline)) + " 截止</span>";
+  }
+
+  function renderSoon() {
+    if (!el.soon) return;
+    var items = (state.data && state.data.items) || [];
+    var soon = items.filter(function (it) {
+      var d = daysLeft(it.deadline);
+      return d !== null && d >= 0 && d <= 7;
+    }).sort(function (a, b) {
+      return String(a.deadline) < String(b.deadline) ? -1 : 1;
+    });
+
+    if (!soon.length) {
+      el.soon.hidden = true;
+      el.soonList.innerHTML = "";
+      return;
+    }
+
+    el.soon.hidden = false;
+    el.soonList.innerHTML = soon.map(function (it) {
+      var d = daysLeft(it.deadline);
+      var cls = d <= 3 ? "dd-hot" : "dd-warn";
+      var tip = d === 0 ? "今天截止" : "剩 " + d + " 天";
+      return '<li class="soon-item" data-url="' + esc(it.url) + '" data-id="' + esc(it.id) + '" tabindex="0">' +
+        '<span class="badge dd ' + cls + '">' + tip + "</span>" +
+        '<strong class="soon-title">' + esc(it.title) + "</strong>" +
+        '<small class="soon-meta">' + esc(shortDay(it.deadline)) + " 截止 · " + esc(it.source) + "</small>" +
+        "</li>";
+    }).join("");
+  }
+
   function fmtTime(iso) {
     if (!iso) return "—";
     return iso.replace("T", " ");
@@ -129,6 +182,8 @@
       badges.push('<span class="badge ' + catCls + '">' + esc(it.category) + "</span>");
       if (it.cxcy && it.category !== "高校竞赛通知") badges.push('<span class="badge cxcy">创新创业</span>');
       if (it.state) badges.push('<span class="badge st ' + stateClass(it.state) + '">' + esc(it.state) + "</span>");
+      var dd = it.deadline ? deadlineBadge(it) : "";
+      if (dd) badges.push(dd);
       if (it.isNew) badges.push('<span class="badge fresh">新</span>');
 
       var tags = (it.tags || []).filter(function (t) {
@@ -245,6 +300,7 @@
     el.nextSync.title = "服务运行期间每天自动同步一次";
     renderCounts();
     renderList();
+    renderSoon();
     renderSide();
     tickCountdown();
     openFromQuery();
@@ -537,6 +593,22 @@
     ].join("");
   }
 
+  function drawerDlu(item) {
+    var url = item.url || "https://cxcy.dlu.edu.cn/";
+    var school = item.source || "大连大学 · 创新创业竞赛";
+    el.drawerBody.innerHTML = [
+      '<div class="xnote">',
+      '  <h4>该通知详情需到大连大学官网查看</h4>',
+      '  <p>' + esc(school) + ' 的网站与本页不在同一个域，且只对校园 / 国内网络开放，',
+      '     浏览器跨域请求被拦截、公共代理也读不到，因此站内无法预览正文。</p>',
+      '  <p>标题、发布日期与报名截止时间均取自该校官网公开列表，与官方一致；',
+      '     完整通知与附件，请点击下方按钮前往学校官网原文查看。</p>',
+      '  <a class="xbtn" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">点击前往大连大学官网查看原文 ↗</a>',
+      '  <p class="xnote-url">' + esc(url) + '</p>',
+      '</div>'
+    ].join("");
+  }
+
   function drawerFromProxy(item) {
     viaProxy(item.url, 2).then(function (html) {
       var doc = new DOMParser().parseFromString(html, "text/html");
@@ -575,6 +647,12 @@
       return;
     }
 
+    if (item.sourceKey === "dlu") {
+      if (note) note.textContent = "该校网站不允许跨域访问，站内无法预览正文，请点击下方按钮前往官网原文。";
+      drawerDlu(item);
+      return;
+    }
+
     el.drawerBody.innerHTML = '<p class="loading-line">正在从官方页面读取原文…</p>';
 
     if (EMBED) {
@@ -605,6 +683,23 @@
   }
 
   /* ------------------------------------------------------------ events */
+  function bindSoon() {
+    if (!el.soonList) return;
+    function open(e) {
+      var li = e.target.closest(".soon-item");
+      if (!li || !state.data) return;
+      var item = (state.data.items || []).filter(function (x) { return x.id === li.dataset.id; })[0];
+      if (item) openDrawer(item);
+    }
+    el.soonList.addEventListener("click", open);
+    el.soonList.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      open(e);
+    });
+  }
+  bindSoon();
+
   el.list.addEventListener("click", function (e) {
     var li = e.target.closest(".notice");
     if (!li || !state.data) return;
