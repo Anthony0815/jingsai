@@ -110,7 +110,7 @@
   <div class="drawer-body" id="drawerBody"></div>
   <footer class="drawer-foot">
     <a class="btn primary" id="drawerOpen" href="#" target="_blank" rel="noopener noreferrer">打开官方原文 ↗</a>
-    <span class="drawer-note">正文由官方页面实时提取，仅作阅读预览，最终以官方原文为准。</span>
+    <span class="drawer-note" id="drawerNote">正文由官方页面实时提取，仅作阅读预览，最终以官方原文为准。</span>
   </footer>
 </section>
 

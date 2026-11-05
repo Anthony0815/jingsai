@@ -505,6 +505,23 @@
   /* ------------------------------------------------------------ drawer */
   var NOISE = /^(字号|打印|关闭|分享|扫一扫|字体|【|打印本页|返回顶部)[:：]?/;
 
+  var DRAWER_NOTE = "正文由官方页面实时提取，仅作阅读预览，最终以官方原文为准。";
+
+  function drawerUpln(item) {
+    var url = item.url || "https://cxcy.upln.cn/";
+    el.drawerBody.innerHTML = [
+      '<div class="xnote">',
+      '  <h4>该竞赛详情需到双创平台查看</h4>',
+      '  <p>辽宁省大学生创新创业管理共享平台（省双创平台）与本页服务器跨域不兼容：',
+      '     该平台的接口拒绝浏览器跨域请求，因此这里无法直接显示大赛正文。</p>',
+      '  <p>大赛名称、报名时间等信息来自平台公开的竞赛大厅，与官方一致；',
+      '     完整通知、报名入口与评审结果，请前往官方平台查看。</p>',
+      '  <a class="xbtn" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">点击前往双创平台查看详情 ↗</a>',
+      '  <p class="xnote-url">' + esc(url) + '</p>',
+      '</div>'
+    ].join("");
+  }
+
   function drawerFromProxy(item) {
     viaProxy(item.url, 2).then(function (html) {
       var doc = new DOMParser().parseFromString(html, "text/html");
@@ -530,10 +547,20 @@
     el.drawerTitle.textContent = title;
     el.drawerMeta.textContent = [item.date, item.source].filter(Boolean).join(" · ");
     el.drawerOpen.href = item.url;
-    el.drawerBody.innerHTML = '<p class="loading-line">正在从官方页面读取原文…</p>';
     el.drawer.hidden = false;
     el.mask.hidden = false;
     document.body.style.overflow = "hidden";
+
+    var note = document.getElementById("drawerNote");
+    if (note) note.textContent = DRAWER_NOTE;
+
+    if (item.sourceKey === "upln") {
+      if (note) note.textContent = "该平台接口禁止跨域，站内无法预览正文，请前往官方平台查看。";
+      drawerUpln(item);
+      return;
+    }
+
+    el.drawerBody.innerHTML = '<p class="loading-line">正在从官方页面读取原文…</p>';
 
     if (EMBED) {
       drawerFromProxy(item);

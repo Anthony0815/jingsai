@@ -456,6 +456,47 @@ a { color: inherit; text-decoration: none; }
 
 .loading-line { color: var(--ink-3); font-size: 13px; }
 
+/* 省双创平台条目：无法跨域读取正文时的提示块 */
+.xnote {
+  border: 1px solid #f0d9b8;
+  background: #fffaf0;
+  border-radius: 10px;
+  padding: 18px 20px;
+  line-height: 1.85;
+}
+
+.xnote h4 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: #8a5a12;
+}
+
+.xnote p {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.xnote .xbtn {
+  display: inline-block;
+  margin: 8px 0 12px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 13.5px;
+  text-decoration: none;
+}
+
+.xnote .xbtn:hover { opacity: 0.9; }
+
+.xnote .xnote-url {
+  font-size: 12px;
+  color: var(--ink-3);
+  word-break: break-all;
+  margin: 0;
+}
+
 /* ---------------------------------------------------------------- responsive */
 @media (max-width: 1080px) {
   .layout { grid-template-columns: minmax(0, 1fr); }
@@ -583,7 +624,7 @@ a { color: inherit; text-decoration: none; }
   <div class="drawer-body" id="drawerBody"></div>
   <footer class="drawer-foot">
     <a class="btn primary" id="drawerOpen" href="#" target="_blank" rel="noopener noreferrer">打开官方原文 ↗</a>
-    <span class="drawer-note">正文由官方页面实时提取，仅作阅读预览，最终以官方原文为准。</span>
+    <span class="drawer-note" id="drawerNote">正文由官方页面实时提取，仅作阅读预览，最终以官方原文为准。</span>
   </footer>
 </section>
 
@@ -1096,6 +1137,23 @@ a { color: inherit; text-decoration: none; }
   /* ------------------------------------------------------------ drawer */
   var NOISE = /^(字号|打印|关闭|分享|扫一扫|字体|【|打印本页|返回顶部)[:：]?/;
 
+  var DRAWER_NOTE = "正文由官方页面实时提取，仅作阅读预览，最终以官方原文为准。";
+
+  function drawerUpln(item) {
+    var url = item.url || "https://cxcy.upln.cn/";
+    el.drawerBody.innerHTML = [
+      '<div class="xnote">',
+      '  <h4>该竞赛详情需到双创平台查看</h4>',
+      '  <p>辽宁省大学生创新创业管理共享平台（省双创平台）与本页服务器跨域不兼容：',
+      '     该平台的接口拒绝浏览器跨域请求，因此这里无法直接显示大赛正文。</p>',
+      '  <p>大赛名称、报名时间等信息来自平台公开的竞赛大厅，与官方一致；',
+      '     完整通知、报名入口与评审结果，请前往官方平台查看。</p>',
+      '  <a class="xbtn" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">点击前往双创平台查看详情 ↗</a>',
+      '  <p class="xnote-url">' + esc(url) + '</p>',
+      '</div>'
+    ].join("");
+  }
+
   function drawerFromProxy(item) {
     viaProxy(item.url, 2).then(function (html) {
       var doc = new DOMParser().parseFromString(html, "text/html");
@@ -1121,10 +1179,20 @@ a { color: inherit; text-decoration: none; }
     el.drawerTitle.textContent = title;
     el.drawerMeta.textContent = [item.date, item.source].filter(Boolean).join(" · ");
     el.drawerOpen.href = item.url;
-    el.drawerBody.innerHTML = '<p class="loading-line">正在从官方页面读取原文…</p>';
     el.drawer.hidden = false;
     el.mask.hidden = false;
     document.body.style.overflow = "hidden";
+
+    var note = document.getElementById("drawerNote");
+    if (note) note.textContent = DRAWER_NOTE;
+
+    if (item.sourceKey === "upln") {
+      if (note) note.textContent = "该平台接口禁止跨域，站内无法预览正文，请前往官方平台查看。";
+      drawerUpln(item);
+      return;
+    }
+
+    el.drawerBody.innerHTML = '<p class="loading-line">正在从官方页面读取原文…</p>';
 
     if (EMBED) {
       drawerFromProxy(item);
