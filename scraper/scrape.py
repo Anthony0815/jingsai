@@ -41,7 +41,8 @@ SOURCES = [
      "url": "https://cxcy.upln.cn/provincial/match/competition/queryShow?pageNo=1&pageSize=100"},
     {"key": "dlu", "name": "大连大学 · 创新创业竞赛", "category": "大连大学竞赛通知",
      "url": "https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm", "filter": "all",
-     "parser": "tr", "forceCxcy": True},
+     "parser": "tr", "forceCxcy": True,
+     "pages": ["https://cxcy.dlu.edu.cn/zxzx/zytz.htm"]},
 ]
 
 KEYWORDS_CXCY = [

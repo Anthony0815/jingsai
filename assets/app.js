@@ -62,7 +62,8 @@
       url: "https://cxcy.lnut.edu.cn/scjs/jstz.htm", parser: "li", forceCxcy: true,
       pages: ["https://cxcy.lnut.edu.cn/scjs/jstz/27.htm"] },
     { key: "dlu", name: "大连大学 · 创新创业竞赛", category: "大连大学竞赛通知",
-      url: "https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm", parser: "tr", forceCxcy: true }
+      url: "https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm", parser: "tr", forceCxcy: true,
+      pages: ["https://cxcy.dlu.edu.cn/zxzx/zytz.htm"] }
   ];
 
   var KW_CXCY = ["创新创业", "双创", "互联网+", "挑战杯", "大学生创业", "创新项目",

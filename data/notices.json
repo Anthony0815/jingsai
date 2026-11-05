@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-05 10:08:18",
+ "generatedAt": "2026-11-05 10:12:05",
  "nextSync": "2026-11-06 08:00:00",
  "items": [
   {
@@ -573,6 +573,21 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3811.htm",
+   "title": "2026年度大连大学创新创业学院创新创业实践班招生简章",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3811.htm",
+   "date": "2026-10-08",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新创业"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026093016045232748/index.shtml",
    "title": "辽宁省2027年少数民族高层次骨干人才研究生报考资格审核公告",
    "url": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026093016045232748/index.shtml",
@@ -740,6 +755,34 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3796.htm",
+   "title": "2026年大连大学“双创之星”评选活动通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3796.htm",
+   "date": "2026-09-11",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "双创"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3798.htm",
+   "title": "2026年大连大学“劳动之星”评选活动通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3798.htm",
+   "date": "2026-09-11",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": false,
+   "tags": [],
+   "isNew": false
+  },
+  {
    "id": "https://cxcy.lnut.edu.cn/info/14428/186201.htm",
    "title": "辽工大创字〔2026〕118号关于举办辽宁工业大学2026年第十八届全国大学生数学竞赛暨省赛选拔赛的通知",
    "url": "https://cxcy.lnut.edu.cn/info/14428/186201.htm",
@@ -819,6 +862,38 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3781.htm",
+   "title": "关于2026年中国好创意暨全国数字艺术设计大赛获奖师生统计获奖信息的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3781.htm",
+   "date": "2026-08-29",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "大赛",
+    "赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3780.htm",
+   "title": "关于2025～2026学年大连大学大学生创新创业获奖名单公示的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3780.htm",
+   "date": "2026-08-26",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新创业",
+    "获奖名单"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026082516274142979/index.shtml",
    "title": "辽宁省教育厅转发《教育部办公厅做好庆祝第42个教师节有关工作的通知》",
    "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026082516274142979/index.shtml",
@@ -859,6 +934,23 @@
    "tournament": true,
    "tags": [
     "竞赛",
+    "赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3777.htm",
+   "title": "关于2026年大连大学挑战杯创业计划大赛东北振兴产业升级专项赛推荐省赛名单的公示",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3777.htm",
+   "date": "2026-08-05",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "挑战杯",
+    "大赛",
     "赛"
    ],
    "isNew": false
@@ -1215,6 +1307,21 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3765.htm",
+   "title": "关于申报大连大学2025～2026学年大学生创新创业奖励通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3765.htm",
+   "date": "2026-06-12",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新创业"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://cxcy.lnut.edu.cn/info/14428/186151.htm",
    "title": "辽工大创字〔2026〕94号关于举办辽宁工业大学2026年辽宁省大学生数学建模竞赛暨省赛选拔赛的通知",
    "url": "https://cxcy.lnut.edu.cn/info/14428/186151.htm",
@@ -1321,6 +1428,23 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3739.htm",
+   "title": "关于2026年大连大学挑战杯创业计划大赛推荐省赛名单的公示",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3739.htm",
+   "date": "2026-05-08",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "挑战杯",
+    "大赛",
+    "赛"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026050716000585883/index.shtml",
    "title": "关于办好2026年职业教育活动周的通知",
    "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026050716000585883/index.shtml",
@@ -1331,6 +1455,38 @@
    "cxcy": false,
    "tournament": false,
    "tags": [],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3736.htm",
+   "title": "关于组织我校拟重点支持的部分大学生创新创业竞赛校内选拔赛负责人遴选答辩的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3736.htm",
+   "date": "2026-05-06",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新创业",
+    "竞赛",
+    "选拔赛"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3737.htm",
+   "title": "“马上发声，共创未来”创新创业学院意见征集问卷",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3737.htm",
+   "date": "2026-05-06",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新创业"
+   ],
    "isNew": false
   },
   {
@@ -1386,6 +1542,21 @@
    "isNew": false
   },
   {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3700.htm",
+   "title": "关于开展四类创新创业学分常态化录入的工作通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3700.htm",
+   "date": "2026-03-11",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新创业"
+   ],
+   "isNew": false
+  },
+  {
    "id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026013009101332298/index.shtml",
    "title": "关于公布2025年辽宁省职业教育精品在线开放课程名单的通知",
    "url": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026013009101332298/index.shtml",
@@ -1410,14 +1581,57 @@
    "tournament": false,
    "tags": [],
    "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3652.htm",
+   "title": "中国高等教育学会大学素质教育研究分会2025学术年会日程",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3652.htm",
+   "date": "2025-10-09",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": false,
+   "tags": [],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3591.htm",
+   "title": "2025年大连大学“双创之星”评选活动来啦！",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3591.htm",
+   "date": "2025-08-29",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "双创"
+   ],
+   "isNew": false
+  },
+  {
+   "id": "https://cxcy.dlu.edu.cn/info/1078/3575.htm",
+   "title": "关于开展2025年辽宁省高校创新创业教育建设项目申报工作的通知",
+   "url": "https://cxcy.dlu.edu.cn/info/1078/3575.htm",
+   "date": "2025-08-11",
+   "sourceKey": "dlu",
+   "source": "大连大学 · 创新创业竞赛",
+   "category": "大连大学竞赛通知",
+   "cxcy": true,
+   "tournament": true,
+   "tags": [
+    "创新创业"
+   ],
+   "isNew": false
   }
  ],
  "counts": {
-  "total": 92,
-  "cxcy": 59,
-  "tournament": 63,
+  "total": 106,
+  "cxcy": 73,
+  "tournament": 75,
   "upln": 4,
-  "dlu": 18,
+  "dlu": 32,
   "new": 0
  },
  "sources": [
@@ -1455,7 +1669,7 @@
    "key": "dlu",
    "name": "大连大学 · 创新创业竞赛",
    "status": "ok",
-   "count": 18
+   "count": 32
   }
  ],
  "platform": {
