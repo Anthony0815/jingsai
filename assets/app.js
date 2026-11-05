@@ -621,11 +621,11 @@
     el.drawerBody.innerHTML = [
       '<div class="xnote">',
       '  <h4>该通知详情需到大连大学官网查看</h4>',
-      '  <p>' + esc(school) + ' 的网站与本页不在同一个域，且只对校园 / 国内网络开放，',
-      '     浏览器跨域请求被拦截、公共代理也读不到，因此站内无法预览正文。</p>',
+      '  <p>正文预览暂时读不到：' + esc(school) + ' 的网站与本页不在同一个域，',
+      '     且只对校园 / 国内网络开放，浏览器跨域请求被拦截、公共代理读取也会超时。</p>',
       '  <p>标题、发布日期与报名截止时间均取自该校官网公开列表，与官方一致；',
-      '     完整通知与附件，请点击下方按钮前往学校官网原文查看。</p>',
-      '  <a class="xbtn" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">点击前往大连大学官网查看原文 ↗</a>',
+      '     完整通知与附件，请点下方按钮前往学校官网原文。</p>',
+      '  <a class="xbtn" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">打开官方原文 ↗</a>',
       '  <p class="xnote-url">' + esc(url) + '</p>',
       '</div>'
     ].join("");
@@ -670,7 +670,7 @@
     }
 
     if (item.sourceKey === "dlu") {
-      if (note) note.textContent = "该校网站不允许跨域访问，站内无法预览正文，请点击下方按钮前往官网原文。";
+      if (note) note.textContent = "正文预览暂时读不到（该站不允许跨域，代理也超时），请点下方「打开官方原文」。";
       drawerDlu(item);
       return;
     }
