@@ -16,7 +16,7 @@ $log = Join-Path $logDir "sync.log"
 
 function Write-Log($msg) {
   $line = "[" + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") + "] " + $msg
-  Add-Content -Path $log -Value $line -Encoding UTF8
+  Add-Content -Path $log -Value $line -Encoding UTF8 -ErrorAction SilentlyContinue
   Write-Output $line
 }
 
