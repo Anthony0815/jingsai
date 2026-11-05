@@ -46,7 +46,13 @@ def main() -> int:
 
     build_id = digest(html + "\n" + css + "\n" + js)[:12]
     items = snapshot.get("items", [])
-    data_digest = digest(json.dumps(items, ensure_ascii=False, sort_keys=True,
+    # 指纹只覆盖「对读者有意义且稳定」的字段：isNew / state / synopsis 这类
+    # 每次抓取都会变（或随时间推移会变）的字段不参与，否则每小时都会误判成「有更新」。
+    STABLE = ("id", "sourceKey", "category", "title", "url", "date",
+              "deadline", "signupStart", "signupEnd")
+    stable_items = [{k: it.get(k) for k in STABLE if it.get(k) not in (None, "", [], {})}
+                    for it in items]
+    data_digest = digest(json.dumps(stable_items, ensure_ascii=False, sort_keys=True,
                                     separators=(",", ":")))[:16]
 
     payload = json.dumps(snapshot, ensure_ascii=False).replace("</", "<\\/")
