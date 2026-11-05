@@ -84,7 +84,7 @@ def main() -> int:
 
     # 启动时若距离上次同步超过 1 小时，先补一次
     try:
-        mark = (ROOT / "data" / ".last-sync").read_text(encoding="utf-8").strip()
+        mark = (ROOT / "data" / ".last-sync").read_text(encoding="utf-8-sig").strip()
         last = dt.datetime.strptime(mark[:19], "%Y-%m-%d %H:%M:%S")
         if (dt.datetime.now() - last).total_seconds() > 3600:
             log("距上次同步已超过 1 小时，先补一次")
