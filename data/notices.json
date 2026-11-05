@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-05 08:57:41",
+ "generatedAt": "2026-11-05 10:07:21",
  "nextSync": "2026-11-06 08:00:00",
  "items": [
   {
@@ -52,8 +52,7 @@
    "signupEnd": "2026-11-07 23:59:59",
    "state": "报名中",
    "synopsis": "第一届辽宁省大学生外语综合技能创新挑战赛",
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "upln_fa8ad98b07c786f3fdccaa4fc7c9a7e1",
@@ -73,8 +72,7 @@
    "signupEnd": "2026-11-09 23:59:59",
    "state": "报名中",
    "synopsis": "辽宁省两岸新锐设计竞赛“华灿奖”",
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3827.htm",
@@ -90,8 +88,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/jyzx/jyyw/2026102811252046399/index.shtml",
@@ -181,8 +178,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "upln_b0fdddcd8c64bcb693a13ca8522ea951",
@@ -202,8 +198,7 @@
    "signupEnd": "2026-11-10 23:59:59",
    "state": "报名中",
    "synopsis": "辽宁省大学生智慧海洋科技创新大赛",
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026102315324974098/index.shtml",
@@ -262,8 +257,7 @@
    "signupEnd": "2026-10-25 23:59:59",
    "state": "已结束",
    "synopsis": "2026年第18届全国大学生广告艺术大赛（辽宁赛区）",
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3824.htm",
@@ -279,8 +273,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/gk/zxtz/2026102110290659632/index.shtml",
@@ -312,8 +305,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.lnut.edu.cn/info/14428/186225.htm",
@@ -357,8 +349,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3820.htm",
@@ -375,8 +366,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3821.htm",
@@ -392,8 +382,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.lnut.edu.cn/info/14428/186222.htm",
@@ -425,8 +414,7 @@
     "大赛",
     "赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3816.htm",
@@ -442,8 +430,7 @@
     "竞赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3817.htm",
@@ -459,8 +446,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026101410592521491/index.shtml",
@@ -505,8 +491,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3814.htm",
@@ -522,8 +507,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3813.htm",
@@ -541,8 +525,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3812.htm",
@@ -558,8 +541,7 @@
     "竞赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.lnut.edu.cn/info/14428/186216.htm",
@@ -617,8 +599,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3807.htm",
@@ -634,8 +615,7 @@
     "竞赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://jyt.ln.gov.cn/jyt/gk/gsgg/2026092814270877642/index.shtml",
@@ -680,8 +660,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.dlu.edu.cn/info/1101/3806.htm",
@@ -697,8 +676,7 @@
     "大赛",
     "选拔赛"
    ],
-   "isNew": false,
-   "stale": true
+   "isNew": false
   },
   {
    "id": "https://cxcy.lnut.edu.cn/info/14428/186211.htm",
@@ -1470,24 +1448,21 @@
   {
    "key": "upln",
    "name": "辽宁省双创平台 · 竞赛大厅",
-   "status": "stale",
-   "count": 4,
-   "error": "https://cxcy.upln.cn/provincial/match/competition/queryShow?pageNo=1&pageSize=100: URLError"
+   "status": "ok",
+   "count": 4
   },
   {
    "key": "dlu",
    "name": "大连大学 · 创新创业竞赛",
-   "status": "stale",
-   "count": 18,
-   "error": "https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm: URLError"
+   "status": "ok",
+   "count": 18
   }
  ],
  "platform": {
-  "ok": false,
-  "status": "unknown",
+  "ok": true,
+  "status": "ok",
   "name": "辽宁省大学生创新创业管理共享平台",
-  "url": "https://cxcy.upln.cn/",
-  "error": "<urlopen error [Errno -2] Name or service not known>"
+  "url": "https://cxcy.upln.cn/"
  },
  "officialLinks": [
   {

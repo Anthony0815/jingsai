@@ -21,7 +21,7 @@
 ```
 .github/workflows/daily-sync.yml   每天 UTC 00:00（北京时间 08:00）触发
         ↓
-scraper/scrape.py                  抓取 5 个官方来源 → data/notices.json
+scraper/scrape.py                  抓取 6 个官方来源 → data/notices.json
         ↓
 tools/build_page.py                模板 + 数据 + 样式脚本 → 单文件 index.html
         ↓
@@ -68,8 +68,12 @@ python -m http.server 8000   # 打开 http://127.0.0.1:8000/
 - 辽宁省教育厅 · 教育要闻 https://jyt.ln.gov.cn/jyt/jyzx/jyyw/index.shtml
 - 辽宁省双创平台 · 竞赛大厅 https://cxcy.upln.cn/match（接口 /provincial/match/competition/queryShow）
 - 辽宁工业大学 · 竞赛通知 https://cxcy.lnut.edu.cn/scjs/jstz.htm
+- 大连大学 · 创新创业竞赛 https://cxcy.dlu.edu.cn/kcsj/cxcyjs.htm（表格行解析，单独一个「大连大学竞赛」频道）
 
-「辽宁省大学生创新创业管理共享平台」的竞赛大厅接口 /provincial/match/competition/queryShow 对浏览器跨域请求返回 403（无 CORS 头），且 GitHub 的境外运行环境无法解析该域名，因此这 4 条竞赛只在**本机运行同步脚本时**抓取并随发布更新；页面上的「立即更新」按钮无法刷新这部分，会显示「沿用缓存」。其余 4 个来源在任何机器上都能抓取。
+「辽宁省大学生创新创业管理共享平台」的竞赛大厅接口 /provincial/match/competition/queryShow 对浏览器跨域请求返回 403（无 CORS 头），且 GitHub 的境外运行环境无法解析该域名；大连大学网站同样只对中国大陆网络开放（境外 runner 与公开代理都超时）。因此：
+
+- **云端**（GitHub Actions 每天 08:00）：能实时抓取省教育厅 3 个来源 + 辽宁工业大学；省双创平台与大连大学沿用上一次缓存（页面上标「沿用缓存」）。
+- **本机**（计划任务 `LN-CXCY-GitHubSync` 或双击 `立即同步.bat`）：6 个来源全部实时抓取，抓到的最新内容会一并推送到 GitHub 与 PocketBay。
 
 ## 免责声明
 
