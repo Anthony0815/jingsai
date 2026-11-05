@@ -1,0 +1,31 @@
+edition: 3.0.0
+name: ln-cxcy-sync
+access: default
+
+vars:
+  region: cn-hangzhou
+
+resources:
+  lncxcy:
+    component: fc3
+    props:
+      region: ${vars.region}
+      functionName: ln-cxcy-sync
+      description: 辽宁省创新创业大赛通知聚合：每天抓 6 个官方来源并发布到 PocketBay
+      runtime: python3.10
+      handler: index.handler
+      code: ./
+      memorySize: 256
+      timeout: 300
+      environmentVariables:
+        POCKETBAY_PROJECT: "3681"
+        POCKETBAY_TOKEN: ${env.POCKETBAY_TOKEN}
+        SEED_FROM_LIVE: https://app-ixvf.pocketbay.app/
+      triggers:
+        - triggerName: daily-0800
+          triggerType: timer
+          qualifier: LATEST
+          triggerConfig:
+            cronExpression: "0 0 8 * * *"
+            enable: true
+            timeZone: Asia/Shanghai

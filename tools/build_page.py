@@ -7,16 +7,18 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+# 默认在仓库根目录构建；云端函数（阿里云 FC）等只写 /tmp 的环境用环境变量覆盖
+ROOT = Path(os.environ.get("SITE_ROOT") or Path(__file__).resolve().parent.parent)
 TEMPLATE = ROOT / "tools" / "page_template.tpl"
 CSS = ROOT / "assets" / "style.css"
 JS = ROOT / "assets" / "app.js"
-DATA = ROOT / "data" / "notices.json"
-OUT = ROOT / "index.html"
+DATA = Path(os.environ.get("DATA_FILE") or ROOT / "data" / "notices.json")
+OUT = Path(os.environ.get("OUT_HTML") or ROOT / "index.html")
 
 SYNC_NOTE = """<div class="card hint">
         <h2>同步说明</h2>

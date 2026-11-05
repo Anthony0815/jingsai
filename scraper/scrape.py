@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import os
 import re
 import ssl
 import sys
@@ -16,8 +17,9 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA_FILE = ROOT / "data" / "notices.json"
+# 默认在仓库根目录运行；云端函数（阿里云 FC）等只写 /tmp 的环境用环境变量覆盖
+ROOT = Path(os.environ.get("SITE_ROOT") or Path(__file__).resolve().parent.parent)
+DATA_FILE = Path(os.environ.get("DATA_FILE") or ROOT / "data" / "notices.json")
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
