@@ -338,13 +338,20 @@
       pad2(d.getHours()) + ":" + pad2(d.getMinutes()) + ":" + pad2(d.getSeconds());
   }
 
-  function nextSyncStr() {
-    // 每天北京时间 08:00 同步一次
-    var d = new Date();
-    var t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8, 0, 0, 0);
-    if (t.getTime() <= d.getTime()) t = new Date(t.getTime() + 86400000);
+  function fmtClock(t) {
     return t.getFullYear() + "-" + pad2(t.getMonth() + 1) + "-" + pad2(t.getDate()) + " " +
       pad2(t.getHours()) + ":" + pad2(t.getMinutes()) + ":" + pad2(t.getSeconds());
+  }
+
+  function nextSyncStr() {
+    // 每天北京时间 08:00、20:00 各同步一次
+    var d = new Date();
+    var hours = [8, 20];
+    for (var i = 0; i < hours.length; i++) {
+      var t = new Date(d.getFullYear(), d.getMonth(), d.getDate(), hours[i], 0, 0, 0);
+      if (t.getTime() > d.getTime()) return fmtClock(t);
+    }
+    return fmtClock(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1, 8, 0, 0, 0));
   }
 
   function setHint(text) {
